@@ -825,6 +825,16 @@ a.rec-game:hover,.rec-game a:hover{color:var(--ink);text-decoration:underline}
   .chip{width:40px}
 }
 .lad .c-logo a{display:block}
+/* iPad: keep Pos, logo and team name pinned while the ladder scrolls sideways */
+@media (min-width:861px) and (max-width:1320px){
+  .lad td.c-pos{position:sticky;left:0;background:#fff;z-index:1}
+  .lad td.c-logo{position:sticky;left:62px;background:#fff;z-index:1}
+  .lad td.c-name{position:sticky;left:124px;background:#fff;z-index:1;border-left:none;box-shadow:inset -1px 0 0 #e6e6e6}
+  .lad th.c-pos{position:sticky;left:0;z-index:2}
+  .lad th.c-team{position:sticky;left:62px;z-index:2}
+  .lad th.c-tname{position:sticky;left:124px;z-index:2}
+  .lad tbody tr:hover td.c-pos,.lad tbody tr:hover td.c-logo,.lad tbody tr:hover td.c-name{background:#e6e6e6}
+}
 .lad-club{color:inherit}
 </style>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
