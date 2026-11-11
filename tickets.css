@@ -97,6 +97,10 @@
 .tk-stamp{position:absolute;inset:auto;transform:rotate(-14deg);border:3px solid #d23a3a;color:#d23a3a;font-weight:800;font-size:13px;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.85);text-align:center;line-height:1.2}
 .tk-ticket.used .tk-tl{filter:saturate(.6)}
 .tk-fine{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+@media (max-width:1200px){
+  .tk-grid{grid-template-columns:1fr}
+  .tk-map{max-width:640px;margin:0 auto}
+}
 @media (max-width:900px){
   .tk-grid{grid-template-columns:1fr}
   .tk-mine{grid-template-columns:1fr}

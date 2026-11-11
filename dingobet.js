@@ -746,7 +746,7 @@ document.addEventListener("click", e=>{
   const b=e.target.closest("[data-sel]");
   if(b){ e.preventDefault(); e.stopPropagation(); const key=b.dataset.sel, s=DB_SELS[key]||dbFindSel(key); if(!s) return;
     const i=DB_SLIP.findIndex(x=>x.key===key);
-    if(i>=0){ DB_SLIP.splice(i,1); delete DB_STAKES[key]; } else { DB_SLIP.push({key, label:s.label||s.ev, mkt:s.mkt||"", ev:s.ev, price:s.price, mid:s.mid||null, boost:!!s.boost, was:s.was}); if(DB_SLIP.length===1 && window.innerWidth<1000) document.body.classList.add("db-slip-open"); }
+    if(i>=0){ DB_SLIP.splice(i,1); delete DB_STAKES[key]; } else { DB_SLIP.push({key, label:s.label||s.ev, mkt:s.mkt||"", ev:s.ev, price:s.price, mid:s.mid||null, boost:!!s.boost, was:s.was}); if(DB_SLIP.length===1 && window.innerWidth<1200) document.body.classList.add("db-slip-open"); }
     dbRefreshSlip(); return; }
   const a=e.target.closest("[data-act]"); if(!a) return;
   const act=a.dataset.act, W=dbWallet();
