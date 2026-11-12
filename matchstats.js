@@ -19,8 +19,9 @@ function msGet(mid){
     if(g=l.match(/^([A-Za-z]{2,6}):$/)){ mode="pl"; cur=out.players[g[1].toUpperCase()]=[]; return; }
     if(mode==="team" && (g=l.match(/^(.+?)\s+([\d.\/%]+)\s*-\s*([\d.\/%]+)$/))){ out.team[g[1].toLowerCase()]=[g[2],g[3]]; return; }
     if(mode==="pl" && l.includes("|")){
-      const [role,name,rating,nums]=l.split("|").map(x=>x.trim()); const v=(nums||"").split(/\s+/).map(Number);
-      const p={role:role.toUpperCase(), name, rating:/^\d/.test(rating)?+rating:null};
+      let f=l.split("|").map(x=>x.trim()); const no=f.length>=5?+f.shift():null;
+      const [role,name,rating,nums]=f; const v=(nums||"").split(/\s+/).map(Number);
+      const p={no, role:role.toUpperCase(), name, rating:/^\d/.test(rating)?+rating:null};
       MS_COLS.forEach((k,i)=>p[k]=v[i]||0);
       p.pts=p.tries*4+p.c*2+p.pg*2+p.fg; cur.push(p);
     }
@@ -99,14 +100,16 @@ function msTeamStats(MS, m){
 
 /* ---------- Player Stats tab ---------- */
 const MS_TABLE=[
-  ["Player",[["pos","Position"],["mins","Mins Played"]]],
+  ["Player",[["no","Number"],["pos","Position"],["mins","Mins Played"]]],
   ["Scoring",[["pts","Points"],["tries","Tries"],["c","Conversions"],["pg","Penalty Goals"],["fg","Field Goals"]]],
   ["Attack",[["ar","All Runs"],["arm","All Run Metres"],["lb","Line Breaks"],["tb","Tackle Busts"],["ta","Try Assists"],["pass","Passes"]]],
   ["Kicking",[["k","Kicks"],["kmg","Kicking Metres"]]],
   ["Defence",[["t","Tackles Made"],["mt","Missed Tackles"],["eff","Tackle Eff."]]],
   ["Discipline",[["err","Errors"],["pen","Penalties"]]],
   ["Rating",[["rating","Player Rating"]]] ];
-function msSorted(ps){ return ps.slice().sort((a,b)=>((b.mins>0)-(a.mins>0))||(MS_ORDER.indexOf(a.role)-MS_ORDER.indexOf(b.role))||((b.rating||0)-(a.rating||0))); }
+// team-list order (jersey numbers) when given, otherwise by position
+function msSorted(ps){ return ps.slice().sort((a,b)=> (a.no!=null&&b.no!=null) ? a.no-b.no : ((b.mins>0)-(a.mins>0))||(MS_ORDER.indexOf(a.role)-MS_ORDER.indexOf(b.role))||((b.rating||0)-(a.rating||0))); }
+const msPos=p=>p.no!=null&&typeof TL_POS!=="undefined" ? (TL_POS[p.no]||"Reserve") : (MS_ROLE[p.role]||p.role);
 function msPlayerStats(MS, m){
   const H=msSide(MS,m.home), A=msSide(MS,m.away);
   const top=(label,k,fmt=x=>x)=>{ const best=ps=>ps.filter(p=>p[k]!=null).sort((a,b)=>b[k]-a[k])[0]; const a=best(H), b=best(A); if(!a||!b) return "";
@@ -115,26 +118,49 @@ function msPlayerStats(MS, m){
       <div class="ms-topn"><span>${esc(a.name)}</span><span>${esc(b.name)}</span></div></div>`; };
   const topCard=`<section class="ms-tops"><h3 class="mc-h">Top Performing Players</h3>
     ${top("Most Tackles","t")}${top("Most Run Metres","arm")}${top("Most Line Breaks","lb")}${top("Highest Player Rating","rating")}</section>`;
-  const cell=(p,k)=>{ if(k==="pos") return MS_ROLE[p.role]||p.role;
+  const cell=(p,k)=>{ if(k==="pos") return msPos(p); if(k==="no") return p.no??"-";
     if(p.mins===0 && k!=="rating") return k==="mins"?"–":"-";
     if(k==="mins") return p.mins+":00";
     if(k==="eff") return p.t+p.mt?Math.round(p.t/(p.t+p.mt)*100)+"%":"-";
     if(k==="rating") return p.rating==null?"N/A":p.rating;
     return p[k]||"-"; };
+  const sv=(p,k)=>{ if(k==="pl") return p.name; if(k==="pos") return p.no??MS_ORDER.indexOf(p.role); if(k==="eff") return p.t+p.mt?p.t/(p.t+p.mt):-1; if(k==="rating") return p.rating??-1; if(p.mins===0&&k!=="no") return -1; return p[k]??-1; };
   const table=(ps,code)=>{ const rows=msSorted(ps);
     return `<div class="ms-tblw${code===m.home?" show":""}" data-team="${esc(code)}"><table class="ms-tbl"><thead>
-      <tr><th class="pl" rowspan="2">Player</th>${MS_TABLE.map(([g,cols])=>`<th class="grp" colspan="${cols.length}">${g==="Player"?"":g}</th>`).join("")}</tr>
-      <tr>${MS_TABLE.flatMap(([g,cols])=>cols.map(([k,l],i)=>`<th class="${i===0?"gs":""}">${l}</th>`)).join("")}</tr></thead>
-      <tbody>${rows.map(p=>`<tr class="${p.mins===0?"dnp":""}"><td class="pl">${esc(p.name)}${MS.potm&&MS.potm.name===p.name?' <span class="ms-star" title="Player of the Match">★</span>':""}</td>${MS_TABLE.flatMap(([g,cols])=>cols.map(([k],i)=>`<td class="${i===0?"gs":""}${k==="pos"?" pos":""}">${cell(p,k)}</td>`)).join("")}</tr>`).join("")}</tbody></table></div>`; };
+      <tr><th class="pl srt" rowspan="2" data-k="pl" onclick="msSort(this)">Player</th>${MS_TABLE.map(([g,cols])=>`<th class="grp" colspan="${cols.length}">${g==="Player"?"":g}</th>`).join("")}</tr>
+      <tr>${MS_TABLE.flatMap(([g,cols])=>cols.map(([k,l],i)=>`<th class="srt${i===0?" gs":""}" data-k="${k}" onclick="msSort(this)">${l}</th>`)).join("")}</tr></thead>
+      <tbody>${rows.map((p,ri)=>`<tr data-i="${ri}" class="${p.mins===0?"dnp":""}"><td class="pl" data-v="${esc(p.name)}">${esc(p.name)}${MS.potm&&MS.potm.name===p.name?' <span class="ms-star" title="Player of the Match">★</span>':""}</td>${MS_TABLE.flatMap(([g,cols])=>cols.map(([k],i)=>`<td class="${i===0?"gs":""}${k==="pos"?" pos":""}" data-v="${sv(p,k)}">${cell(p,k)}</td>`)).join("")}</tr>`).join("")}</tbody></table></div>`; };
+  const reset=`<button class="ms-reset" onclick="msSortReset(this)">↺ Default order</button>`;
   const toggle=`<div class="ms-toggle"><button class="on" onclick="msPick(this,'${esc(m.home)}')">${esc(team(m.home).nick)}</button><button onclick="msPick(this,'${esc(m.away)}')">${esc(team(m.away).nick)}</button></div>`;
-  return topCard+`<section class="mc-card ms-full" data-show="${esc(m.home)}">${toggle}${table(H,m.home)}${table(A,m.away)}</section>`;
+  return topCard+`<section class="mc-card ms-full" data-show="${esc(m.home)}"><div class="ms-ctl">${toggle}${reset}</div><div class="ms-hint">Tap a stat to sort</div>${table(H,m.home)}${table(A,m.away)}</section>`;
+}
+// sort the player table: first tap = highest first, second tap = lowest first
+function msSort(th){
+  const card=th.closest(".ms-full"), k=th.dataset.k, text=k==="pl"||k==="pos";
+  const dir = th.dataset.dir==="d" ? "a" : th.dataset.dir==="a" ? "d" : (text?"a":"d");
+  card.querySelectorAll("th.srt").forEach(x=>{ x.classList.remove("on"); delete x.dataset.dir; });
+  card.querySelectorAll(`th.srt[data-k="${k}"]`).forEach(x=>{ x.classList.add("on"); x.dataset.dir=dir; });
+  card.querySelectorAll(".ms-tbl").forEach(tb=>{
+    const idx=[...tb.querySelectorAll("thead tr:last-child th")].findIndex(x=>x.dataset.k===k), body=tb.tBodies[0];
+    const val=tr=>{ const td=k==="pl"?tr.cells[0]:tr.cells[idx+1]; const v=td.dataset.v; return text&&k==="pl"?v:+v; };
+    const keepDnp=!["pl","pos","no"].includes(k);
+    [...body.rows].sort((a,b)=>{ if(keepDnp){ const d=a.classList.contains("dnp")-b.classList.contains("dnp"); if(d) return d; } const x=val(a), y=val(b); const c=typeof x==="string"?x.localeCompare(y):(x-y); return (dir==="a"?c:-c)||(+a.dataset.i-+b.dataset.i); }).forEach(r=>body.appendChild(r)); });
+  card.classList.add("sorted");
+}
+function msSortReset(btn){
+  const card=btn.closest(".ms-full");
+  card.querySelectorAll("th.srt").forEach(x=>{ x.classList.remove("on"); delete x.dataset.dir; });
+  card.querySelectorAll(".ms-tbl tbody").forEach(body=>[...body.rows].sort((a,b)=>+a.dataset.i-+b.dataset.i).forEach(r=>body.appendChild(r)));
+  card.classList.remove("sorted");
 }
 function msPick(btn, code){ const card=btn.closest(".ms-full"); card.dataset.show=code; card.querySelectorAll(".ms-toggle button").forEach(b=>b.classList.toggle("on",b===btn)); card.querySelectorAll(".ms-tblw").forEach(w=>w.classList.toggle("show",w.dataset.team===code)); }
 
 /* ---------- Team Lists tab (from the game's players) ---------- */
 function msTeamLists(MS, m){
-  const side=code=>{ const ps=msSorted(msSide(MS,code)), on=ps.filter(p=>p.mins>0), off=ps.filter(p=>p.mins===0);
-    const row=p=>`<div class="ms-tlr"><span class="nm">${esc(p.name)}</span><span class="ps">${MS_ROLE[p.role]||p.role}</span><span class="mn">${p.mins?p.mins+"'":"DNP"}</span></div>`;
-    return `<div class="ms-tlc"><div class="ms-tlh">${logo(code,"sm")}<b>${esc(team(code).nick)}</b></div>${on.map(row).join("")}${off.length?`<div class="mc-sub">Did not take the field</div>${off.map(row).join("")}`:""}</div>`; };
+  const side=code=>{ const ps=msSorted(msSide(MS,code)), numbered=ps.every(p=>p.no!=null);
+    const row=p=>`<div class="ms-tlr${p.mins?"":" dnp"}">${numbered?`<span class="no">${p.no}</span>`:""}<span class="nm">${esc(p.name)}</span><span class="ps">${msPos(p)}</span><span class="mn">${p.mins?p.mins+"'":"DNP"}</span></div>`;
+    const groups = numbered ? [["",ps.filter(p=>p.no<=13)],["Interchange",ps.filter(p=>p.no===14||p.no===15)],["Reserves",ps.filter(p=>p.no>=16)]]
+                            : [["",ps.filter(p=>p.mins>0)],["Did not take the field",ps.filter(p=>p.mins===0)]];
+    return `<div class="ms-tlc"><div class="ms-tlh">${logo(code,"sm")}<b>${esc(team(code).nick)}</b></div>${groups.filter(g=>g[1].length).map(([h,l])=>`${h?`<div class="mc-sub">${h}</div>`:""}${l.map(row).join("")}`).join("")}</div>`; };
   return `<section class="mc-card"><h3 class="mc-h">Team Lists</h3><div class="ms-tl">${side(m.home)}${side(m.away)}</div></section>`;
 }
