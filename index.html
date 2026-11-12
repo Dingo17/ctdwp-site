@@ -845,6 +845,7 @@ a.rec-game:hover,.rec-game a:hover{color:var(--ink);text-decoration:underline}
 <link rel="stylesheet" href="power.css">
 <link rel="stylesheet" href="players.css">
 <link rel="stylesheet" href="tickets.css">
+<link rel="stylesheet" href="matchstats.css">
 </head>
 <body>
 
@@ -914,6 +915,8 @@ a.rec-game:hover,.rec-game a:hover{color:var(--ink);text-decoration:underline}
 <script src="reports.js"></script>
 <script src="tickets.js"></script>
 <script src="players.js"></script>
+<script src="data/matchstats.js"></script>
+<script src="matchstats.js"></script>
 <script>
 /* =========================================================
    LOGO (recoloured to follow the theme via currentColor)
@@ -1777,8 +1780,9 @@ function teamListCard(c, sid, H, A){
 
 // tabs + sticky header shared by completed and upcoming pages
 let MC_FORCE_TAB=null;
-function mcShell(m, hero, stats, lists, def){
+function mcShell(m, hero, stats, lists, def, extra=null){
   if(MC_FORCE_TAB==="stats"||MC_FORCE_TAB==="lists") def=MC_FORCE_TAB;
+  if(extra) return mcShellX(m, hero, extra, def);
   const p=played(m), H=m.home, A=m.away;
   const mid = p ? `<span class="mcs-s${m.hs>m.as?" w":""}">${m.hs}</span><span class="mcs-ft">Full Time</span><span class="mcs-s${m.as>m.hs?" w":""}">${m.as}</span>` : `<span class="mcs-m"><b class="w">${esc(m.time||"TBC")}</b></span>`;
   const tabs = `<div class="mc-tabs"><button data-t="lists" onclick="mcTab(this)">Team Lists</button><button data-t="stats" onclick="mcTab(this)">Match Stats</button></div>`;
@@ -1787,7 +1791,18 @@ function mcShell(m, hero, stats, lists, def){
     ${hero}<div class="mc-tabbar">${tabs}</div>
     <div class="mc-pane p-lists">${lists}</div><div class="mc-pane p-stats">${stats}</div></div></div>`;
 }
+// completed games with match stats: any number of tabs [[id,label,html],...]
+function mcShellX(m, hero, panes, def){
+  const H=m.home, A=m.away;
+  const mid = `<span class="mcs-s${m.hs>m.as?" w":""}">${m.hs}</span><span class="mcs-ft">Full Time</span><span class="mcs-s${m.as>m.hs?" w":""}">${m.as}</span>`;
+  const tabs = `<div class="mc-tabs">${panes.map(([id,l])=>`<button data-t="${id}" class="${id===def?"on":""}" onclick="mcTab(this)">${esc(l)}</button>`).join("")}</div>`;
+  return `<div class="mc-root mc-x" data-tab="${def}">
+    <div class="mc-sticky"><div class="mcs-row done"><span class="mcs-t h">${esc(team(H).nick)}</span>${logo(H)}${mid}${logo(A)}<span class="mcs-t a">${esc(team(A).nick)}</span></div>${tabs}</div>
+    ${hero}<div class="mc-tabbar">${tabs}</div>
+    ${panes.map(([id,,html])=>`<div class="mc-pane p-${id}${id===def?" on":""}">${html}</div>`).join("")}</div></div>`;
+}
 function mcTab(btn){
+  const rootX=btn.closest(".mc-x"); if(rootX){ rootX.querySelectorAll(".mc-pane").forEach(p=>p.classList.toggle("on",p.classList.contains("p-"+btn.dataset.t))); rootX.querySelectorAll(".mc-tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===btn.dataset.t)); }
   const root=btn.closest(".mc-root"); root.dataset.tab=btn.dataset.t;
   if(btn.closest(".mc-sticky")){ const bar=root.querySelector(".mc-tabbar"); window.scrollTo({top:window.scrollY+bar.getBoundingClientRect().top-70}); }
 }
@@ -2015,6 +2030,12 @@ function viewMatch(c, sid, ri, mi){
   sections.push(mcCard("Next match", `<div class="mc-next"><div><div class="mc-sub">${esc(th.nick)}</div>${nH?mcMini(nH):`<span class="mc-none">No further games</span>`}</div>
     <div><div class="mc-sub">${esc(ta.nick)}</div>${nA?mcMini(nA):`<span class="mc-none">No further games</span>`}</div></div>`));
 
+  const MS = window.msGet ? msGet(m.mid) : null;
+  if(MS){
+    const heroMS = hero + msSummary(MS, m);
+    const def = MC_FORCE_TAB==="lists" ? "lists" : MC_FORCE_TAB==="stats" ? "facts" : "team";
+    return mcShell(m, heroMS, null, null, def, [["lists","Team Lists",msTeamLists(MS,m)],["team","Team Stats",msTeamStats(MS,m)],["players","Player Stats",msPlayerStats(MS,m)],["facts","Match Facts",sections.join("")]]);
+  }
   return mcShell(m, hero, sections.join(""), MC_NO_LISTS, "stats");
 }
 

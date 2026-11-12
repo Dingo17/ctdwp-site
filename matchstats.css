@@ -1,0 +1,124 @@
+/* ===== Match stats (completed games) ===== */
+.mc-x .mc-pane{display:none}
+.mc-x .mc-pane.on{display:block}
+.mc-x .mc-tabs button.on{color:var(--ink);font-weight:600;border-bottom-color:var(--accent)}
+.mc-x .mc-tabs{overflow-x:auto;scrollbar-width:none}
+.mc-x .mc-tabs::-webkit-scrollbar{display:none}
+.mc-x .mc-tabs button{white-space:nowrap}
+
+/* scoring summary under the score */
+.ms-sum{padding:30px 24px 26px!important}
+.ms-sc{margin:0 auto 26px;max-width:640px}
+.ms-sc:last-of-type{margin-bottom:8px}
+.ms-sch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:22px;margin-bottom:12px}
+.ms-sch span{font-size:17px;font-weight:300}
+.ms-sch span:first-child{text-align:right}
+.ms-sch span:last-child{text-align:left}
+.ms-sch span.b{font-weight:700}
+.ms-sch em{font-style:normal;font-size:17px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.ms-scn{display:grid;grid-template-columns:1fr 1fr}
+.ms-scn>div{font-size:15px;line-height:1.55;padding:2px 22px;min-height:24px}
+.ms-scn .h{text-align:right;border-right:1px solid #ddd}
+.ms-scn .a{text-align:left}
+.ms-scn b{font-weight:600}
+.ms-potm{display:flex;align-items:center;justify-content:center;gap:14px;margin:22px auto 0;padding-top:20px;border-top:1px solid #eee;max-width:640px;text-align:left}
+.ms-potm img.tlogo{width:46px;height:46px}
+.ms-potm small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.ms-potm b{font-size:19px;font-weight:700}
+
+/* team stats */
+.ms-sub{font-size:16px;letter-spacing:.06em;text-transform:uppercase;margin:24px 0 14px}
+.ms-ts .mc-h{font-weight:600;font-size:19px;letter-spacing:.05em}
+.ms-poss{display:flex;align-items:center;justify-content:center;gap:16px}
+.ms-poss>span{font-size:38px;font-weight:300;min-width:90px}
+.ms-poss>span:first-child{text-align:right}
+.ms-poss>span:last-child{text-align:left}
+.ms-poss>span.b{font-weight:600}
+.ms-poss sup,.ms-comp sup{font-size:.4em;vertical-align:super;margin-left:1px}
+.ms-donut{display:block}
+.ms-comp{display:flex;justify-content:center;gap:clamp(40px,12vw,130px)}
+.ms-comp>div{position:relative;display:flex;flex-direction:column;align-items:center}
+.ms-comp>div>b{position:absolute;top:75px;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:300}
+.ms-comp>div>b.b{font-weight:600}
+.ms-comp small{font-size:24px;margin-top:10px;color:var(--ink)}
+.ms-thead{display:flex;justify-content:space-between;max-width:720px;margin:0 auto 6px;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.ms-thead span{display:flex;align-items:center;gap:8px}
+.ms-thead img.tlogo{width:30px;height:30px}
+.ms-bar{max-width:720px;margin:0 auto;padding:12px 0 8px;border-top:1px solid #f2f2f2}
+.ms-bar:first-of-type{border-top:0}
+.ms-bk{font-size:14px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
+.ms-brow{display:grid;grid-template-columns:76px 1fr 76px;align-items:center;gap:10px}
+.ms-brow .v{font-size:22px;font-weight:300}
+.ms-brow .v.l{text-align:right}.ms-brow .v.r{text-align:left}
+.ms-brow .v.b{font-weight:700}
+.ms-track{display:flex;gap:6px;height:14px}
+.ms-track i{display:block;min-width:6px}
+.ms-track i.h{background:var(--ch,#111);clip-path:polygon(0 0,100% 0,calc(100% - 7px) 100%,0 100%);border-radius:2px 0 0 2px}
+.ms-track i.a{background:var(--ca,#8a8a8a);clip-path:polygon(7px 0,100% 0,100% 100%,0 100%);border-radius:0 2px 2px 0}
+
+/* top performers */
+.ms-tops{margin-bottom:16px}
+.ms-tops .mc-h{text-align:center;font-weight:600;font-size:19px;letter-spacing:.05em;margin:10px 0 6px}
+.ms-top{background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin:30px 0 0;position:relative}
+.ms-topk{position:absolute;top:-24px;left:0;right:0;text-align:center;font-size:15px;letter-spacing:.08em;text-transform:uppercase}
+.ms-topb{position:relative;display:grid;grid-template-columns:1fr auto auto 1fr;align-items:center;height:86px;border-radius:8px 8px 0 0;overflow:hidden;color:#fff;
+  background:linear-gradient(115deg,transparent 0 30%,rgba(255,255,255,.05) 30% 42%,transparent 42% 58%,rgba(255,255,255,.04) 58% 70%,transparent 70%),#111}
+.ms-topb::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:#222;transform:skewX(-20deg)}
+.ms-topb b{font-size:36px;font-weight:300;min-width:130px;text-align:center;position:relative;z-index:1}
+.ms-topb b.w{font-weight:700}
+.ms-ts-l,.ms-ts-r{display:flex;align-items:center;padding:0 22px}
+.ms-ts-r{justify-content:flex-end}
+.ms-topb img.tlogo{width:62px;height:62px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+.ms-topn{display:flex;justify-content:space-between;padding:12px 18px 14px;font-size:19px;font-weight:500}
+.ms-topn span:last-child{text-align:right}
+
+/* full player table */
+.ms-full{padding:18px 0 0!important;overflow:hidden}
+.ms-toggle{display:inline-flex;background:#fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin:0 auto 18px;overflow:hidden}
+.ms-toggle button{appearance:none;border:0;background:none;font:inherit;font-size:15px;padding:10px 26px;cursor:pointer;color:#333}
+.ms-toggle button.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.ms-full .ms-tblw{display:none;overflow-x:auto}
+.ms-full .ms-tblw.show{display:block}
+.ms-tbl{border-collapse:collapse;width:100%;min-width:1500px;font-size:14px;background:#fff}
+.ms-tbl th{font-weight:400;color:#444;padding:8px 8px;white-space:normal;vertical-align:bottom;background:#fff;font-size:13px;line-height:1.25}
+.ms-tbl th.grp{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);padding:6px 8px 10px;text-align:left}
+.ms-tbl td{padding:11px 8px;border-top:1px solid #eee;text-align:center;white-space:nowrap}
+.ms-tbl td.pos{color:#333}
+.ms-tbl .gs{border-left:1px solid #e6e6e6}
+.ms-tbl .pl{position:sticky;left:0;z-index:1;background:#fff;text-align:left;font-weight:600;padding-left:18px;min-width:190px;box-shadow:inset -1px 0 0 #e6e6e6}
+.ms-tbl th.pl{font-weight:400;z-index:2}
+.ms-tbl tbody tr:hover td{background:#f4f4f4}
+.ms-tbl tr.dnp td{color:#999}
+.ms-star{color:var(--accent);font-size:13px}
+
+/* team lists from the game */
+.ms-tl{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:860px;margin:0 auto;text-align:left}
+.ms-tlh{display:flex;align-items:center;gap:10px;font-size:16px;padding-bottom:10px;border-bottom:2px solid var(--ink);margin-bottom:4px}
+.ms-tlh img.tlogo{width:36px;height:36px}
+.ms-tlr{display:grid;grid-template-columns:1fr auto 44px;gap:10px;padding:9px 2px;border-bottom:1px solid #f0f0f0;font-size:15px}
+.ms-tlr .ps{color:var(--muted);font-size:13px}
+.ms-tlr .mn{text-align:right;color:#444;font-size:13px}
+
+@media (max-width:860px){
+  .ms-sum{padding:22px 10px 20px!important}
+  .ms-sch{gap:12px}
+  .ms-sch em,.ms-sch span{font-size:15px}
+  .ms-scn>div{font-size:13px;padding:2px 10px}
+  .ms-poss>span{font-size:28px;min-width:60px}
+  .ms-poss svg{width:130px;height:130px}
+  .ms-comp{gap:24px}
+  .ms-comp svg{width:120px;height:120px}
+  .ms-comp>div>b{top:60px;font-size:28px}
+  .ms-comp small{font-size:18px}
+  .ms-brow{grid-template-columns:56px 1fr 56px}
+  .ms-brow .v{font-size:17px}
+  .ms-topb{height:70px}
+  .ms-topb b{font-size:28px;min-width:70px}
+  .ms-ts-l,.ms-ts-r{padding:0 10px}
+  .ms-topb img.tlogo{width:44px;height:44px}
+  .ms-topn{font-size:15px;padding:10px 12px 12px}
+  .ms-tbl .pl{min-width:150px;padding-left:12px}
+  .ms-tl{grid-template-columns:1fr;gap:24px}
+}
+.ms-track.z i{background:#e6e6e6}
+.ms-topb img.tlogo{margin:0}
