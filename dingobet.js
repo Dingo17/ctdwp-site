@@ -668,7 +668,7 @@ function viewDbHow(){
     <h3>Settling bets</h3>
     <p>Bets settle themselves once a result is entered. If a head-to-head bet ends in a draw, dead heat rules apply and you're paid half your stake at full odds. A Same Game Multi leg that ends in a draw counts as a loss. Futures settle when the season, series or tournament finishes.</p>
     <h3>Multis and Same Game Multis</h3>
-    <p>Add two or more selections and the slip offers a multi. Selections from the same game are priced together as a Same Game Multi from the simulations, so related picks such as "Kangaroos -8.5" and "Kangaroos 13+" are priced realistically. Selections that can't both happen are blocked. Boosts are singles only.</p>
+    <p>Add two or more selections and the slip offers a multi. Selections from the same game are priced together as a Same Game Multi from the simulations, so related picks such as "Kangaroos -8.5" and "Kangaroos 13+" are priced realistically. Futures from the same competition can go in one multi too: picks that can't both happen are blocked, a pick that's already guaranteed by another (say "Premiers" with "To Make the Top 8") adds nothing to the price, and linked picks on the same team are priced a little shorter. Match selections that can't both happen are blocked too. Boosts are singles only.</p>
     <h3>Just for fun</h3>
     <p>Real gambling can cause harm. If it's affecting you or someone you know, call Gambling Help Online on 1800 858 858.</p></div>`);
 }
@@ -685,6 +685,73 @@ function viewDingobet(rest){
   return viewDbHome();
 }
 
+/* ---------- futures in the same multi ----------
+   Futures from one competition can share a multi. Picks that can't both
+   happen are blocked, a pick that's already guaranteed by another (e.g.
+   "Premiers" makes "Top 8" certain) adds nothing to the price, and other
+   picks on the same team are trimmed because they tend to land together. */
+function dbFutCombine(ls){
+  const n=(dbFutures().P.teams||[]).length||17;
+  const info=l=>{ const p=l.key.split("|").slice(1), c=p[0], m=p[2];
+    const o={l, c, m, p, t:null, lo:1, hi:n, gf:false, champ:false};
+    if(c==="ctdwp"){
+      if(m==="premier"){ o.t=p[3]; o.hi=8; o.gf=o.champ=true; }
+      else if(m==="gf"){ o.t=p[3]; o.hi=8; o.gf=true; }
+      else if(m==="minor"){ o.t=p[3]; o.hi=1; }
+      else if(m==="spoon"){ o.t=p[3]; o.lo=n; }
+      else if(m==="top4"){ o.t=p[3]; o.hi=4; }
+      else if(m==="top8"){ o.t=p[3]; if(p[4]==="y") o.hi=8; else o.lo=9; }
+      else if(m==="band"){ o.t=p[3]; const [a,b]=p[4].split("-").map(Number); o.lo=a; o.hi=b; }
+      else if(m==="wins"){ o.t=p[3]; }
+    }
+    return o; };
+  const I=ls.map(info), name=x=>`"${x.l.mkt?x.l.mkt+": ":""}${x.l.label}"`;
+  const clash=(a,b)=>`${name(a)} and ${name(b)} can't both happen.`;
+  for(let i=0;i<I.length;i++) for(let j=i+1;j<I.length;j++){ const a=I[i], b=I[j];
+    if(a.c!==b.c) continue;
+    if(a.c==="ctdwp"){
+      if(a.m===b.m && ["premier","minor","spoon","quin"].includes(a.m)) return {err:clash(a,b)};
+      if(a.m===b.m && a.m==="spec" && a.p[3]===b.p[3]) return {err:clash(a,b)};
+      if(a.m===b.m && ["top8","wins","band"].includes(a.m) && a.t===b.t) return {err:clash(a,b)};
+      if(a.m==="riv" && b.m==="riv" && a.p[3]===b.p[4] && a.p[4]===b.p[3]) return {err:clash(a,b)};
+      if(a.t && a.t===b.t && Math.max(a.lo,b.lo)>Math.min(a.hi,b.hi)) return {err:clash(a,b)};
+      const q=a.m==="quin"?a:b.m==="quin"?b:null, o=q===a?b:a;
+      if(q && o.champ && !q.p.slice(3,5).includes(o.t)) return {err:clash(a,b)};
+      if(q && o.t && q.p.slice(3,5).includes(o.t) && o.lo>8) return {err:clash(a,b)};
+      if(a.m==="minor" && b.m==="minor") return {err:clash(a,b)};
+      if(a.hi===1 && b.hi===1 && a.t!==b.t) return {err:clash(a,b)};
+      if(a.lo===n && b.lo===n && a.t!==b.t) return {err:clash(a,b)};
+    }
+    if(a.c==="origin"){
+      if(a.m===b.m) return {err:clash(a,b)};
+      const side=x=>x.m==="series"?x.p[3]:x.p[3].slice(0,3);
+      if(side(a)!==side(b)) return {err:clash(a,b)};
+    }
+    if(a.c==="intl" && a.p[3]===b.p[3]){
+      if(a.m==="grp" && b.m==="grp") return {err:clash(a,b)};
+    }
+  }
+  // International Series: only two sides can make each final
+  const fin={}; I.filter(x=>x.c==="intl").forEach(x=>{ const g=x.p[3]; (fin[g]=fin[g]||new Set()).add(x.p[4]); });
+  for(const [g,s] of Object.entries(fin)) if(s.size>2) return {err:`Only two teams can make the ${g.replace(/_/g," ")} final.`};
+  // does a imply b?
+  const implies=(a,b)=>{ if(a===b||a.c!==b.c) return false;
+    if(a.c==="ctdwp"){
+      const inQuin=(q,t)=>q.m==="quin"&&q.p.slice(3,5).includes(t);
+      if(b.m==="gf") return (a.m==="premier"&&a.t===b.t)||inQuin(a,b.t);
+      if(["top8","top4","band"].includes(b.m)){ const lo=inQuin(a,b.t)?1:a.t===b.t?a.lo:null, hi=inQuin(a,b.t)?8:a.hi; return lo!=null && lo>=b.lo && hi<=b.hi && (a.lo!==b.lo||a.hi!==b.hi||I.indexOf(a)<I.indexOf(b)); }
+    }
+    if(a.c==="origin") return a.m==="score" && b.m==="series" && a.p[3].slice(0,3)===b.p[3];
+    if(a.c==="intl") return a.m==="grp" && b.m==="grpf" && a.p[3]===b.p[3] && a.p[4]===b.p[4];
+    return false; };
+  const keep=I.filter(b=>!I.some(a=>implies(a,b)));
+  let price=keep.reduce((acc,x)=>acc*x.l.price,1);
+  // linked picks on the same team (or the same final) tend to land together
+  const seen={}; let linked=0;
+  keep.forEach(x=>{ const k=x.c+"|"+(x.t||(x.c==="intl"?x.p[3]:x.c==="origin"?"series":"")); if(!x.t&&x.c==="ctdwp") return; if(seen[k]) linked++; seen[k]=1; });
+  if(linked) price=Math.max(Math.max(...keep.map(x=>x.l.price)), price*Math.pow(0.85,linked));
+  return {price};
+}
 /* ---------- bet slip ---------- */
 function dbSlipGroups(){
   // group match legs by game so same-game legs become one Same Game Multi leg
@@ -696,7 +763,7 @@ function dbMultiInfo(){
   const legs=DB_SLIP.filter(s=>!s.boost); if(legs.length<2) return null;
   const {groups}=dbSlipGroups(); let price=1, err="", parts=[];
   for(const [k,ls] of Object.entries(groups)){
-    if(k.startsWith("fut:")){ if(ls.length>1){ err="Two futures from the same competition can't go in one multi."; break; } price*=ls[0].price; parts.push({key:ls[0].key,label:ls[0].label,mkt:ls[0].mkt,ev:ls[0].ev,price:ls[0].price}); continue; }
+    if(k.startsWith("fut:")){ const F=dbFutCombine(ls); if(F.err){ err=F.err; break; } price*=F.price; ls.forEach(l=>parts.push({key:l.key,label:l.label,mkt:l.mkt,ev:l.ev,price:l.price})); continue; }
     if(ls.length===1){ price*=ls[0].price; parts.push({key:ls[0].key,label:ls[0].label,mkt:ls[0].mkt,ev:ls[0].ev,price:ls[0].price}); continue; }
     const g=dbMatch(k); const sim=dbSim(g); const p=dbJoint(sim, ls.map(s=>s.key.split("|").slice(2)));
     if(p<=0.0004){ err=`These ${team(g.m.home).nick} v ${team(g.m.away).nick} selections can't all happen.`; break; }
@@ -744,7 +811,7 @@ function dbPlace(){
 }
 document.addEventListener("click", e=>{
   const b=e.target.closest("[data-sel]");
-  if(b){ e.preventDefault(); e.stopPropagation(); const key=b.dataset.sel, s=DB_SELS[key]||dbFindSel(key); if(!s) return;
+  if(b){ e.preventDefault(); e.stopPropagation(); const key=b.dataset.sel, s=(key.startsWith("f|")&&dbFindSel(key))||DB_SELS[key]||dbFindSel(key); if(!s) return;
     const i=DB_SLIP.findIndex(x=>x.key===key);
     if(i>=0){ DB_SLIP.splice(i,1); delete DB_STAKES[key]; } else { DB_SLIP.push({key, label:s.label||s.ev, mkt:s.mkt||"", ev:s.ev, price:s.price, mid:s.mid||null, boost:!!s.boost, was:s.was}); if(DB_SLIP.length===1 && window.innerWidth<1200) document.body.classList.add("db-slip-open"); }
     dbRefreshSlip(); return; }
