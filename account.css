@@ -1,0 +1,84 @@
+/* ===== Site accounts ===== */
+.side-acct{margin-top:auto}
+.sa-btn{display:flex;align-items:center;gap:10px;width:100%;padding:16px 28px;background:#1d1d1d;border:0;border-top:1px solid #2a2a2a;color:#fff;font:inherit;font-size:15px;font-weight:600;cursor:pointer;text-align:left;text-decoration:none}
+.sa-btn:hover{background:#262626;color:var(--accent)}
+.sa-btn svg{width:20px;height:20px;flex:none}
+.sa-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sa-btn.in{color:var(--accent)}
+
+/* pop-up */
+body.ac-open{overflow:hidden}
+.ac-modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+.ac-box{position:relative;width:100%;max-width:420px;background:#fff;border-radius:12px;padding:28px 28px 22px;box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:calc(100vh - 32px);overflow:auto}
+.ac-x{position:absolute;right:10px;top:8px;border:0;background:none;font-size:28px;line-height:1;cursor:pointer;color:#666;padding:6px 10px}
+.ac-logo{width:64px;height:64px;margin:0 auto 14px;background:#111;border-radius:14px;padding:8px;color:#fff}
+.ac-logo svg{width:100%;height:100%;display:block}
+.ac-tabs{display:grid;grid-template-columns:1fr 1fr;background:#f1f1f1;border-radius:8px;padding:4px;margin-bottom:18px}
+.ac-tabs button{border:0;background:none;font:inherit;font-size:15px;font-weight:600;padding:10px;border-radius:6px;cursor:pointer;color:#555}
+.ac-tabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.ac-box form,.ac-form{display:flex;flex-direction:column;gap:12px}
+.ac-box label,.ac-form label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#333}
+.ac-box input,.ac-form input{font:inherit;font-size:16px;padding:12px 14px;border:1px solid #d6d6d6;border-radius:8px;outline:none}
+.ac-box input:focus,.ac-form input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,200,90,.15)}
+.ac-hint{font-size:12px;color:var(--muted);margin-top:-6px}
+.ac-hint.ok{color:#0a8a3a}.ac-hint.bad{color:#c0141c}
+.ac-err{color:#c0141c;font-size:14px;min-height:0}
+.ac-err:empty{display:none}
+.ac-go{appearance:none;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-size:16px;font-weight:700;padding:13px 18px;border-radius:8px;cursor:pointer}
+.ac-go:disabled{opacity:.6;cursor:wait}
+.ac-ghost{appearance:none;border:1px solid #d6d6d6;background:#fff;font:inherit;font-size:15px;font-weight:600;padding:11px 18px;border-radius:8px;cursor:pointer}
+.ac-ghost:hover{border-color:var(--accent)}
+.ac-note{background:#f4f4f4;border-radius:8px;padding:10px 12px;font-size:14px;margin:0 0 14px}
+.ac-foot{font-size:12.5px;color:var(--muted);margin:16px 0 0;line-height:1.5;text-align:center}
+.ac-foot a{color:var(--ink);font-weight:600}
+.ac-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:#111;color:#fff;padding:12px 18px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:600;max-width:calc(100vw - 32px)}
+.ac-toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* account page */
+.ac-page{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.ac-card{background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:22px 24px}
+.ac-card h3{margin:0 0 14px;font-size:15px;letter-spacing:.08em;text-transform:uppercase}
+.ac-prof{display:flex;align-items:center;gap:18px}
+.ac-prof>div:nth-child(2){flex:1}
+.ac-prof h2{margin:0 0 4px;font-size:24px}
+.ac-prof small{color:var(--muted)}
+.ac-av{width:58px;height:58px;border-radius:50%;background:#111;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;flex:none}
+.ac-tag{display:inline-block;background:var(--accent);color:var(--accent-ink);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:3px;vertical-align:middle}
+.ac-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.ac-stats div{background:#f6f6f6;border-radius:8px;padding:12px}
+.ac-stats small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.ac-stats b{font-size:20px}
+.ac-link{font-weight:700;margin-right:16px;color:var(--ink)}
+.ac-muted{color:var(--muted);font-size:14px;margin:0}
+.ac-form{max-width:360px}
+.ac-cta{text-align:center;padding:40px 24px}
+.ac-cta h2{margin:0 0 10px}
+.ac-cta p{max-width:520px;margin:0 auto 20px;color:#444;line-height:1.55}
+.ac-ctab{display:flex;gap:10px;justify-content:center}
+.ac-adm{overflow-x:auto}
+.ac-adm table{width:100%;border-collapse:collapse;font-size:14px}
+.ac-adm th{text-align:left;font-weight:600;color:#555;padding:8px;border-bottom:2px solid #eee;white-space:nowrap}
+.ac-adm td{padding:9px 8px;border-bottom:1px solid #f0f0f0;white-space:nowrap}
+.ac-acts button{border:1px solid #d6d6d6;background:#fff;border-radius:6px;font:inherit;font-size:12px;padding:6px 10px;cursor:pointer;margin-left:6px}
+.ac-acts button.del{color:#c0141c}
+
+/* dingobet bits */
+.db-bal small a{color:var(--accent);font-weight:700}
+.db-join{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#111;color:#fff;border-radius:8px;padding:16px 18px;margin:0 0 16px}
+.db-join b{display:block;font-size:16px;margin-bottom:3px}
+.db-join span{font-size:13px;opacity:.8}
+.db-join button{appearance:none;border:0;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:700;padding:11px 20px;border-radius:6px;cursor:pointer;flex:none}
+.db-me{display:inline-block;background:var(--accent);color:var(--accent-ink);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:4px;vertical-align:middle}
+.db-br.bot b{font-weight:600}
+.db-bet.pending .db-bh em{background:#e9f8ef;color:#0a7a34}
+
+@media (max-width:860px){
+  .side-acct{position:absolute;right:8px;top:0;height:56px;display:flex;align-items:center;margin:0}
+  .sa-btn{background:none;border:0;padding:10px;width:auto}
+  .sa-btn span{display:none}
+  .sa-btn svg{width:24px;height:24px}
+  .sa-btn:hover{background:none}
+  .ac-stats{grid-template-columns:repeat(2,1fr)}
+  .ac-prof{flex-wrap:wrap}
+  .db-join{flex-direction:column;align-items:flex-start}
+}

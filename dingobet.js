@@ -417,14 +417,33 @@ function dbFutResult(key){
 /* ---------- wallet (this browser only) ---------- */
 const DBW_KEY="dingobet.wallet.v1";
 let DBW=null, DB_SLIP=[], DB_STAKES={}, DB_MULTI="";
+// logged in: the wallet comes from the account (server); otherwise this browser's guest wallet
+const dbServer=()=>typeof acIn==="function" && acIn();
+function dbWalletFromAccount(){
+  const w=AC.me.wallet;
+  const W={server:true, v:AC.v, balance:+w.balance, bets:(w.bets||[]).map(b=>({...b, stake:+b.stake, price:+b.price, ret:+b.ret})), created:AC.me.created,
+    daily:(w.daily&&w.daily>=w.today)?dbToday():null, resets:w.resets||0, badges:w.badges||{}, bonus:+w.bonus||0, tickets:w.tickets||[], ballot:w.ballot||{}};
+  W._saved={badges:JSON.stringify(W.badges), ballot:JSON.stringify(W.ballot)};
+  return W;
+}
 function dbWallet(){
+  if(dbServer()){ if(!DBW||!DBW.server||DBW.v!==AC.v){ DBW=dbWalletFromAccount(); dbLoadSlip(); } return DBW; }
+  if(DBW&&DBW.server) DBW=null;
   if(DBW) return DBW;
   try{ DBW=JSON.parse(localStorage.getItem(DBW_KEY)||"null"); }catch(e){ DBW=null; }
   if(!DBW||typeof DBW.balance!=="number") DBW={balance:DB.START, bets:[], created:Date.now(), daily:null, resets:0, badges:{}, bonus:0};
-  try{ const s=JSON.parse(localStorage.getItem(DBW_KEY+".slip")||"null"); if(s){ DB_SLIP=s.slip||[]; DB_STAKES=s.stakes||{}; DB_MULTI=s.multi||""; } }catch(e){}
+  dbLoadSlip();
   return DBW;
 }
-function dbSave(){ try{ localStorage.setItem(DBW_KEY, JSON.stringify(DBW)); localStorage.setItem(DBW_KEY+".slip", JSON.stringify({slip:DB_SLIP,stakes:DB_STAKES,multi:DB_MULTI})); }catch(e){} }
+let DB_SLIP_LOADED=false;
+function dbLoadSlip(){ if(DB_SLIP_LOADED) return; DB_SLIP_LOADED=true; try{ const s=JSON.parse(localStorage.getItem(DBW_KEY+".slip")||"null"); if(s){ DB_SLIP=s.slip||[]; DB_STAKES=s.stakes||{}; DB_MULTI=s.multi||""; } }catch(e){} }
+function dbSave(){
+  try{ localStorage.setItem(DBW_KEY+".slip", JSON.stringify({slip:DB_SLIP,stakes:DB_STAKES,multi:DB_MULTI})); }catch(e){}
+  if(!DBW) return;
+  if(DBW.server){ // only badges and ticket ballots are saved from the page; money moves go through the account functions
+    ["badges","ballot"].forEach(k=>{ const s=JSON.stringify(DBW[k]||{}); if(s!==DBW._saved[k]){ DBW._saved[k]=s; acRpc("save_extra",{p_token:AC.token,p_key:k,p_value:DBW[k]||{}}).then(()=>{ AC.me.wallet[k]=JSON.parse(s); }).catch(()=>{}); } });
+    return; }
+  try{ localStorage.setItem(DBW_KEY, JSON.stringify(DBW)); }catch(e){} }
 function dbLegResult(leg){
   if(leg.sgm){ const rs=leg.sgm.map(k=>dbLegResult({key:k})); if(rs.includes("L")||rs.includes("D")) return "L"; if(rs.includes(null)) return null; return "W"; }
   const p=leg.key.split("|");
@@ -432,8 +451,26 @@ function dbLegResult(leg){
   if(p[0]==="f") return dbFutResult(leg.key);
   return null;
 }
+// work out a bet's result from the results on the site: null = not finished yet
+function dbBetOutcome(b){
+  const rs=b.legs.map(dbLegResult);
+  if(rs.includes("L")) return {status:"lost", ret:0, legRes:rs};
+  if(rs.includes(null)) return null;
+  const mult=b.legs.reduce((acc,l,i)=>acc*(rs[i]==="W"?+l.price:rs[i]==="D"?+l.price/2:1),1);
+  return {status:rs.every(r=>r==="V")?"void":"won", ret:Math.round(b.stake*mult*100)/100, legRes:rs};
+}
+let DB_LOSS_SENT={};
 function dbSettle(){
   const W=dbWallet(); let changed=false;
+  if(W.server){
+    // show results straight away; losses are settled from here, wins are paid out by the admin's browser
+    const losses=[];
+    W.bets.forEach(b=>{ if(b.status!=="open") return; const o=dbBetOutcome(b); b.legRes=o?o.legRes:b.legs.map(dbLegResult); b.pending=o&&o.status!=="lost"?o:null;
+      if(o&&o.status==="lost"&&!DB_LOSS_SENT[b.id]){ DB_LOSS_SENT[b.id]=1; losses.push({id:b.id, legRes:o.legRes}); } });
+    if(losses.length) acRpc("settle_losses",{p_token:AC.token,p_updates:losses}).then(me=>{ acUpdate(me); if(typeof render==="function") render(true); }).catch(()=>{});
+    if(typeof acAdminSettle==="function") acAdminSettle();
+    dbBadges(); return;
+  }
   W.bets.forEach(b=>{ if(b.status!=="open") return;
     const rs=b.legs.map(dbLegResult); b.legRes=rs;
     if(rs.includes("L")){ b.status="lost"; b.ret=0; changed=true; }
@@ -503,7 +540,7 @@ function dbHeader(active){
   const tabs=[["","Matches"],["futures","Futures"],["sim","Season Simulator"],["bets","My Bets"],["board","Leaderboard"],["how","How It Works"]];
   return `<div class="db-head"><div class="wrap">
     <div class="db-top"><div class="db-brand"><span class="db-logo"><b>dingo</b>bet<i></i></span><span class="db-tag">Just for fun · Dingo Dollars only · No real money</span></div>
-      <div class="db-wallet"><span class="db-bal"><small>Balance</small><b id="dbBal">${dbMoney(W.balance)}</b></span>
+      <div class="db-wallet"><span class="db-bal"><small>${W.server?`👤 ${esc(AC.me.username)}`:`Guest wallet · <a href="javascript:void 0" data-act="login" data-m="signup">Sign up</a> / <a href="javascript:void 0" data-act="login" data-m="login">Log in</a>`}</small><b id="dbBal">${dbMoney(W.balance)}</b></span>
         ${canDaily?`<button class="db-daily" data-act="daily">Claim daily D$${DB.DAILY}</button>`:`<span class="db-claimed">Daily bonus claimed ✓</span>`}</div></div>
     <nav class="db-tabs">${tabs.map(([k,l])=>`<a href="#dingobet${k?"-"+k:""}" class="${active===k?"on":""}">${l}${k==="bets"&&dbStats().open?` <em>${dbStats().open}</em>`:""}</a>`).join("")}</nav>
   </div></div>`;
@@ -622,11 +659,11 @@ function viewDbSim(){
 }
 function dbLegCount(b){ return b.legs.reduce((a,l)=>a+(l.sgm?l.sgm.length:1),0); }
 function dbBetHtml(b){
-  const st={open:"Open",won:"Won",lost:"Lost",void:"Void"}[b.status];
+  const st=b.pending?(b.pending.status==="void"?"Refund pending":"Won – payout pending"):{open:"Open",won:"Won",lost:"Lost",void:"Void"}[b.status];
   const nLegs=dbLegCount(b), kind=b.legs.length>1?`${nLegs}-leg ${b.legs.some(l=>l.sgm)?"Multi (incl. SGM)":"Multi"}`:b.legs[0].sgm?`${nLegs}-leg Same Game Multi`:"Single";
-  return `<div class="db-bet ${b.status}"><div class="db-bh"><span>${kind} @ ${dbFmt(b.price)}</span><em>${st}</em></div>
+  return `<div class="db-bet ${b.pending?"won pending":b.status}"><div class="db-bh"><span>${kind} @ ${dbFmt(b.price)}</span><em>${st}</em></div>
     ${b.legs.map((l,i)=>`<div class="db-bl"><i class="${(b.legRes||[])[i]||""}"></i><div><b>${esc(l.label)}</b><small>${esc(l.mkt)} · ${esc(l.ev)}</small></div><span>${dbFmt(l.price)}</span></div>`).join("")}
-    <div class="db-bf"><span>Stake ${dbMoney(b.stake)}</span><span>${b.status==="open"?`To win ${dbMoney(b.stake*b.price)}`:`Return ${dbMoney(b.ret)}`}</span><small>${new Date(b.t).toLocaleDateString("en-AU",{day:"numeric",month:"short"})}</small></div></div>`;
+    <div class="db-bf"><span>Stake ${dbMoney(b.stake)}</span><span>${b.pending?`Return ${dbMoney(b.pending.ret)}`:b.status==="open"?`To win ${dbMoney(b.stake*b.price)}`:`Return ${dbMoney(b.ret)}`}</span><small>${new Date(b.t).toLocaleDateString("en-AU",{day:"numeric",month:"short"})}</small></div></div>`;
 }
 function viewDbBets(){
   dbSettle();
@@ -645,12 +682,18 @@ function viewDbBets(){
 }
 function viewDbBoard(){
   dbSettle();
-  const B=dbBots(), S=dbStats(), W=dbWallet();
-  const you={name:"You", desc:W.resets?`${W.resets} wallet reset${W.resets>1?"s":""}`:"Your wallet on this device", n:S.settled, w:S.won, profit:S.profit, you:true};
-  const rows=[you, ...B.bots.map(b=>({name:b.name, desc:b.desc, n:b.n, w:b.w, profit:b.bal-DB.START}))].sort((a,b)=>b.profit-a.profit);
-  return dbLayout("board", `<h2 class="section-title">Punters' leaderboard <span class="db-sub">profit since Dingobet opened</span></h2>
-    <p class="db-mnote">Take on Dingobet's five computer punters. Each one sticks to a single strategy on every game from the International Series (Season 13) and the Premiership (Season 14) onwards, at the odds of the day.</p>
-    <div class="db-board">${rows.map((r,i)=>`<div class="db-br${r.you?" you":""}"><span class="n">${i+1}</span><div><b>${esc(r.name)}</b><small>${esc(r.desc)}</small></div><span class="rec">${r.w}/${r.n}</span><span class="p ${r.profit>=0?"pos":"neg"}">${dbSigned(r.profit)}</span></div>`).join("")}</div>
+  const B=dbBots(), S=dbStats(), W=dbWallet(), me=dbServer()?AC.me.username:null;
+  const players=AC.board||[];
+  if(typeof acBoard==="function" && (!AC.board || Date.now()-AC.boardAt>30000)) acBoard().then(x=>{ if(x && /^#dingobet-board/.test(location.hash)) render(true); });
+  const rows=players.map(p=>({name:p.username, desc:`${p.open?p.open+" open bet"+(p.open>1?"s":"")+" · ":""}Balance ${dbMoney(+p.balance)}${p.resets?` · ${p.resets} reset${p.resets>1?"s":""}`:""}`, n:+p.settled, w:+p.won, profit:+p.profit, you:p.username===me}));
+  if(!me) rows.push({name:"You (guest)", desc:"This device only – sign up to join the leaderboard", n:S.settled, w:S.won, profit:S.profit, you:true, guest:true});
+  B.bots.forEach(b=>rows.push({name:b.name, desc:b.desc, n:b.n, w:b.w, profit:b.bal-DB.START, bot:true}));
+  rows.sort((a,b)=>b.profit-a.profit||a.name.localeCompare(b.name));
+  const join = me ? "" : `<div class="db-join"><div><b>Get on the board</b><span>Create a free account to save your wallet on every device and take on everyone else.</span></div><button data-act="login" data-m="signup">Sign up</button></div>`;
+  return dbLayout("board", `<h2 class="section-title">Punters' leaderboard <span class="db-sub">profit from settled bets</span></h2>
+    <p class="db-mnote">Everyone with an account, plus Dingobet's five computer punters (🤖), who each stick to one strategy on every game from the International Series (Season 13) and the Premiership (Season 14) onwards.${AC.board?"":" Loading players…"}</p>
+    ${join}
+    <div class="db-board">${rows.map((r,i)=>`<div class="db-br${r.you?" you":""}${r.bot?" bot":""}"><span class="n">${i+1}</span><div><b>${r.bot?"🤖 ":""}${esc(r.name)}${r.you&&!r.guest?' <span class="db-me">You</span>':""}</b><small>${esc(r.desc)}</small></div><span class="rec">${r.w}/${r.n}</span><span class="p ${r.profit>=0?"pos":"neg"}">${dbSigned(r.profit)}</span></div>`).join("")}</div>
     <div class="db-tipsrec">🐕 Dingo's tips: <b>${B.tips.right} / ${B.tips.n}</b> correct${B.tips.n?` (${Math.round(B.tips.right/B.tips.n*100)}%)`:""} since launch.</div>`);
 }
 function viewDbHow(){
@@ -666,6 +709,7 @@ function viewDbHow(){
     <h3>Which games are open</h3>
     <p>Only the current round of each competition (or the next one, if nothing is under way) is open for betting. The same odds appear on the Draw page, and clicking them brings you straight here.</p>
     <h3>Settling bets</h3>
+    <p><b>Accounts:</b> without an account your wallet lives in this browser only. With a free account (just a username and password) your wallet, bets and badges are saved to your account on every device and you appear on the leaderboard. Losing bets settle as soon as the result is on the site; winning bets show as "Won – payout pending" until they're paid out, which happens automatically shortly after the result goes up.</p>
     <p>Bets settle themselves once a result is entered. If a head-to-head bet ends in a draw, dead heat rules apply and you're paid half your stake at full odds. A Same Game Multi leg that ends in a draw counts as a loss. Futures settle when the season, series or tournament finishes.</p>
     <h3>Multis and Same Game Multis</h3>
     <p>Add two or more selections and the slip offers a multi. Selections from the same game are priced together as a Same Game Multi from the simulations, so related picks such as "Kangaroos -8.5" and "Kangaroos 13+" are priced realistically. Futures from the same competition can go in one multi too: picks that can't both happen are blocked, a pick that's already guaranteed by another (say "Premiers" with "To Make the Top 8") adds nothing to the price, and linked picks on the same team are priced a little shorter. Match selections that can't both happen are blocked too. Boosts are singles only.</p>
@@ -804,6 +848,14 @@ function dbPlace(){
   if(!bets.length){ dbToast("Enter a stake first."); return; }
   const total=bets.reduce((a,b)=>a+b.stake,0);
   if(total>W.balance+1e-9){ dbToast(`Not enough Dingo Dollars: you have ${dbMoney(W.balance)}.`); return; }
+  if(W.server){
+    const btn=document.querySelector(".db-place"); if(btn){ if(btn.disabled) return; btn.disabled=true; btn.textContent="Placing…"; }
+    acRpc("place_bets",{p_token:AC.token, p_bets:bets.map(b=>({stake:b.stake, price:Math.round(b.price*100)/100, legs:b.legs}))})
+      .then(me=>{ acUpdate(me); DB_SLIP=[]; DB_STAKES={}; DB_MULTI=""; dbWallet(); dbBadges(); dbSave(); document.body.classList.remove("db-slip-open");
+        render(true); setTimeout(()=>dbToast(`✅ ${bets.length} bet${bets.length>1?"s":""} placed – ${dbMoney(total)}`),50); })
+      .catch(e=>{ dbToast(acErr(e)); if(btn){ btn.disabled=false; btn.textContent="Place bets"; } });
+    return;
+  }
   bets.forEach(b=>W.bets.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6), t:Date.now(), stake:b.stake, price:Math.round(b.price*100)/100, legs:b.legs, status:"open", ret:0}));
   W.balance=Math.round((W.balance-total)*100)/100; DB_SLIP=[]; DB_STAKES={}; DB_MULTI=""; dbBadges(); dbSave();
   document.body.classList.remove("db-slip-open");
@@ -823,6 +875,9 @@ document.addEventListener("click", e=>{
   else if(act==="place") dbPlace();
   else if(act==="openslip") document.body.classList.add("db-slip-open");
   else if(act==="closeslip") document.body.classList.remove("db-slip-open");
+  else if(act==="daily" && W.server){ if(W.daily!==dbToday()) acRpc("claim_daily",{p_token:AC.token}).then(me=>{ acUpdate(me); render(true); setTimeout(()=>dbToast(`🎁 D$${DB.DAILY} added. See you tomorrow!`),50); }).catch(e=>dbToast(acErr(e))); }
+  else if(act==="reset" && W.server){ if(confirmReset(a)) acRpc("reset_wallet",{p_token:AC.token}).then(me=>{ acUpdate(me); render(true); setTimeout(()=>dbToast("Wallet reset to "+dbMoney(DB.START)),50); }).catch(e=>dbToast(acErr(e))); }
+  else if(act==="login"){ acOpen(a.dataset.m||"signup"); }
   else if(act==="daily"){ if(W.daily!==dbToday()){ W.daily=dbToday(); W.balance+=DB.DAILY; W.bonus=(W.bonus||0)+DB.DAILY; dbSave(); render(true); setTimeout(()=>dbToast(`🎁 D$${DB.DAILY} added. See you tomorrow!`),50); } }
   else if(act==="reset"){ if(confirmReset(a)){ DBW={balance:DB.START, bets:[], created:Date.now(), daily:W.daily, resets:(W.resets||0)+1, badges:W.badges||{}, bonus:0}; dbBadges(); dbSave(); render(true); setTimeout(()=>dbToast("Wallet reset to "+dbMoney(DB.START)),50); } }
   else if(act==="team"){ DB_TEAM=a.dataset.team; render(true); }

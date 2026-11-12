@@ -282,6 +282,13 @@ function tkBuy(){
   const when=[g.m.day&&(DAY_NAMES[g.m.day]||g.m.day), g.m.time, g.r.name, g.s.name].filter(Boolean).join(" · ");
   const addons=TK_ADDONS.filter(a=>TK.add[a[0]]).map(a=>a[0]==="jersey"?team(g.m.home).nick+" jersey":a[1]);
   const t={id, mid:TK.mid, home:g.m.home, away:g.m.away, when, venue:venueOf(g.m), sec:T.s[0], cat:T.s[2], gate:T.s[5], row, seats, n:T.n, addons, msg:TK.add.shout?TK.msg.trim():"", paid:T.total, t:Date.now()};
+  if(W.server){
+    if(TK.buying) return; TK.buying=true;
+    acRpc("buy_tickets",{p_token:AC.token, p_amount:T.total, p_item:t}).then(me=>{ TK.buying=false; acUpdate(me); dbWallet();
+      TK.done=t; TK.sec=null; TK.add={}; TK.msg=""; TK.qty={adult:2,child:0,conc:0}; tkRedraw(); window.scrollTo({top:0,behavior:"smooth"}); })
+      .catch(e=>{ TK.buying=false; acToast(acErr(e)); });
+    return;
+  }
   tkTickets().push(t); W.balance=Math.round((W.balance-T.total)*100)/100; dbSave();
   TK.done=t; TK.sec=null; TK.add={}; TK.msg=""; TK.qty={adult:2,child:0,conc:0}; tkRedraw(); window.scrollTo({top:0,behavior:"smooth"});
 }

@@ -846,6 +846,7 @@ a.rec-game:hover,.rec-game a:hover{color:var(--ink);text-decoration:underline}
 <link rel="stylesheet" href="players.css">
 <link rel="stylesheet" href="tickets.css">
 <link rel="stylesheet" href="matchstats.css">
+<link rel="stylesheet" href="account.css">
 </head>
 <body>
 
@@ -865,6 +866,7 @@ a.rec-game:hover,.rec-game a:hover{color:var(--ink);text-decoration:underline}
     <a href="#dingobet" data-nav="dingobet" class="nav-db">Dingobet</a>
     <a href="#clubs" data-nav="clubs">Clubs</a>
   </nav>
+  <div class="side-acct" id="sideAcct"></div>
 </aside>
 
 <div class="shell">
@@ -905,6 +907,7 @@ a.rec-game:hover,.rec-game a:hover{color:var(--ink);text-decoration:underline}
 <script src="data/oneoff.js"></script>
 <script src="data/playerpool.js"></script>
 <script src="data/news.js"></script>
+<script src="account.js"></script>
 <script src="data/dingobet.js"></script>
 <script src="dingobet.js"></script>
 <script src="power.js"></script>
@@ -2889,10 +2892,11 @@ function render(keepScroll){
   else if(parts[0]==="stats"){ html=parts[1]==="players"?viewPlayerStats(parts[2],parts[3]):viewStats(parts[1],parts[2]); nav="stats"; }
   else if(parts[0]==="clubs"){ html=viewClubs(); nav="clubs"; }
   else if(parts[0]==="records"){ html=viewRecords(parts[1]); nav="records"; }
+  else if(parts[0]==="account"){ html=viewAccount(); nav="account"; }
   else if(parts[0]==="ladder"){ html=viewLadder(parts[1],parts[2]); nav="ladder"; }
   else html=viewHome();
   document.getElementById("app").innerHTML=html;
-  document.getElementById("fixbar").style.display = (nav==="draw"||nav==="ladder"||nav==="records"||nav==="clubs"||nav==="stats"||nav==="pool"||nav==="dingobet"||nav==="power"||nav==="dallym"||nav==="casualty") ? "none" : "";
+  document.getElementById("fixbar").style.display = (nav==="draw"||nav==="ladder"||nav==="records"||nav==="clubs"||nav==="stats"||nav==="pool"||nav==="dingobet"||nav==="power"||nav==="dallym"||nav==="casualty"||nav==="account") ? "none" : "";
   document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("active",a.dataset.nav===nav));
   if(samePage && /ladder$/.test(parts[0])) document.querySelectorAll(".lad-wrap,.ladder-wrap").forEach((e,i)=>{ if(sideScroll[i]) e.scrollLeft=sideScroll[i]; });
   if(!keepScroll) window.scrollTo(0,0);
@@ -2911,6 +2915,7 @@ let keepScrollOnce=false;   // set by the round arrows so the page stays where i
 window.addEventListener("hashchange",()=>{ ladderPanelOpen=false; const keep=keepScrollOnce; keepScrollOnce=false; render(keep); });
 document.getElementById("club-sites").innerHTML=clubSitesHtml();
 render();
+acSideRender(); acInit();
 </script>
 </body>
 </html>
