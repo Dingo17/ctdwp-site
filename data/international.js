@@ -96,7 +96,7 @@ TBC V TBC - Allianz Stadium, Sydney - Sunday 7:35pm
 
 Pacific Championship:
 Round 1:
-($1.03) SAM V COK ($24.00) - HFC Bank Stadium, Suva - Sunday 2:00pm
+SAM 46 - 18 COK - HFC Bank Stadium, Suva
 ($1.70) FIJ V PNG ($2.10) - HFC Bank Stadium, Suva - Sunday 4:05pm
 
 Round 2:

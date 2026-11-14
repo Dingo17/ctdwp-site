@@ -14,6 +14,59 @@
    ========================================================= */
 window.MATCH_STATS = {
 
+"intl-13-0-2": `
+Player of the Match: SAM Stephen Crichton
+Team Stats:
+Tries 8 - 3
+Goals 7 - 3
+Field Goals 0 - 0
+Possession 61% - 39%
+Completions 8/16 - 4/12
+Errors 10 - 9
+Penalties Conceded 1 - 0
+Tackles 38 - 51
+Missed Tackles 1 - 7
+Line Breaks 34 - 24
+
+SAM:
+1  | FB  | Sualauvi Fa'alogo       | 75  | 80 6 68 4 4 0 0 3 0 0 0 0 0 0 0 0 0
+2  | W   | Brian To'o              | 93  | 80 7 116 7 1 0 0 4 0 0 0 0 0 1 0 0 0
+3  | C   | Stephen Crichton        | 134 | 80 11 151 5 2 0 0 5 0 0 1 0 0 2 7 0 0
+4  | FB  | Hamiso Tabuai-Fidow     | 110 | 80 10 139 9 3 0 0 6 0 0 1 2 0 1 0 0 0
+5  | C   | Deine Mariner           | 85  | 80 5 35 7 4 1 0 2 0 0 1 1 0 1 0 0 0
+6  | 5/8 | Jarome Luai             | 55  | 80 9 26 10 0 0 0 1 0 0 0 2 0 0 0 0 0
+7  | 5/8 | Dylan Brown             | 122 | 80 20 144 18 5 0 0 3 1 11 2 0 0 1 0 0 0
+8  | PR  | Payne Haas              | 48  | 54 4 10 6 3 0 0 0 0 0 0 0 0 0 0 0 0
+9  | HK  | Benaiah Ioelu           | 68  | 80 10 63 24 5 0 0 1 0 0 0 0 0 0 0 0 0
+10 | PR  | Terrell May             | 52  | 54 6 41 4 1 0 0 1 0 0 0 0 0 0 0 0 0
+11 | SR  | Jeremiah Nanai          | 74  | 80 9 88 9 0 0 0 3 0 0 1 1 0 0 0 0 0
+12 | SR  | Connelly Lemuelu        | 114 | 80 12 94 12 3 0 0 5 0 0 1 2 0 2 0 0 0
+13 | PR  | Tino Fa'asuamaleaui     | 60  | 73 3 6 2 8 0 0 0 0 0 0 0 1 0 0 0 0
+14 | SR  | Francis Manuleleua      | 40  | 33 5 14 4 0 0 0 0 0 0 0 0 0 0 0 0 0
+15 | PR  | Spencer Leniu           | 35  | 26 2 6 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+16 | SR  | Simi Sasagi             | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | Junior Paulo            | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+COK:
+1  | FB  | Esom Ioka               | 28  | 80 6 35 6 5 2 0 1 0 0 0 1 0 0 0 0 0
+2  | W   | Paul Ulberg             | 52  | 80 6 64 2 4 1 0 2 0 0 0 3 0 1 0 0 0
+3  | C   | Valentine Holmes        | 66  | 80 8 95 8 5 0 0 4 0 0 0 0 0 1 3 0 0
+4  | C   | KL Iro                  | 55  | 80 4 59 2 1 0 0 6 0 0 0 0 0 0 0 0 0
+5  | C   | Reubenn Rennie          | 28  | 80 4 33 3 2 1 0 2 0 0 0 0 0 0 0 0 0
+6  | C   | Brad Takairangi         | 36  | 80 11 37 9 4 0 0 1 0 0 0 0 0 0 0 0 0
+7  | C   | Esan Marsters           | 16  | 80 6 34 6 2 0 0 1 0 0 0 1 0 0 0 0 0
+8  | PR  | Davvy Moale             | 51  | 62 9 59 7 4 0 0 2 0 0 2 0 0 0 0 0 0
+9  | HK  | Rua Ngatikaura          | 50  | 80 10 50 21 5 1 0 1 0 0 1 1 0 1 0 0 0
+10 | PR  | Makahesi Makatoa        | 13  | 49 4 15 2 2 0 0 0 0 0 0 0 0 0 0 0 0
+11 | SR  | Brendan Piakura         | 41  | 80 8 59 6 4 0 0 3 0 0 0 1 0 0 0 0 0
+12 | SR  | Marata Niukore          | 39  | 80 4 45 5 5 0 0 1 0 0 0 1 0 0 0 0 0
+13 | L   | Mason Teague            | 18  | 67 4 12 3 5 1 0 0 0 0 0 0 0 0 0 0 0
+14 | PR  | Rhys Dakin              | 14  | 32 2 6 1 3 0 0 0 0 0 0 0 0 0 0 0 0
+15 | SR  | Amare Milford           | 6   | 32 1 1 1 3 1 0 0 0 0 0 0 0 0 0 0 0
+16 | C   | Delahia Wigmore         | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | K-Ci Newton-Whare       | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+`,
+
 "intl-13-0-1": `
 Player of the Match: NZL Kaeo Weekes
 Team Stats:
