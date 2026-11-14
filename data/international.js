@@ -81,7 +81,7 @@ PNG 18 - 42 TON - Allianz Stadium, Sydney
 Four Nations:
 Round 1:
 AUS 14 - 12 TON - Suncorp Stadium, Brisbane
-($1.35) NZL V ENG ($3.50) - Go Media Stadium, Auckland - Saturday 6:10pm
+NZL 36 - 18 ENG - Go Media Stadium, Auckland
 
 Round 2:
 TON V ENG - HBF Park, Perth - Friday 8:10pm

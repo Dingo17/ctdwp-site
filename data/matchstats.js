@@ -14,6 +14,59 @@
    ========================================================= */
 window.MATCH_STATS = {
 
+"intl-13-0-1": `
+Player of the Match: NZL Kaeo Weekes
+Team Stats:
+Tries 6 - 3
+Goals 6 - 3
+Field Goals 0 - 0
+Possession 58% - 42%
+Completions 8/13 - 4/11
+Errors 5 - 9
+Penalties Conceded 0 - 1
+Tackles 44 - 54
+Missed Tackles 1 - 4
+Line Breaks 28 - 17
+
+NZL:
+1  | FB  | Kalyn Ponga             | 61  | 80 5 74 6 3 1 0 3 0 0 0 1 0 0 0 0 0
+2  | W   | Ronaldo Mulitalo        | 75  | 80 6 55 4 2 0 0 5 0 0 0 0 0 0 0 0 0
+3  | FB  | Kaeo Weekes             | 126 | 80 12 117 10 5 0 0 6 0 0 0 2 0 1 0 0 0
+4  | C   | Casey McLean            | 103 | 80 6 62 7 3 0 0 3 0 0 2 0 0 1 0 0 0
+5  | W   | Jamayne Isaako          | 115 | 80 6 160 5 2 0 0 4 0 0 0 0 0 2 6 0 0
+6  | HB  | Kodi Nikorima           | 83  | 80 10 54 8 3 0 0 2 0 0 0 0 0 1 0 0 0
+7  | HB  | Jahrome Hughes          | 66  | 80 12 72 10 3 0 0 1 0 0 0 1 0 1 0 0 0
+8  | PR  | Moses Leota             | 42  | 64 5 7 4 1 0 0 0 0 0 0 0 0 0 0 0 0
+9  | HK  | Jeremy Marshall-King    | 71  | 80 10 69 24 3 0 1 1 0 0 0 0 0 0 0 0 0
+10 | PR  | James Fisher-Harris     | 55  | 64 6 40 5 4 0 0 0 0 0 0 0 0 0 0 0 0
+11 | SR  | Briton Nikora           | 78  | 80 10 50 11 3 0 0 1 0 0 1 0 0 0 0 0 0
+12 | SR  | Scott Sorensen          | 64  | 80 10 17 12 5 0 0 0 0 0 1 0 0 0 0 0 0
+13 | SR  | Joseph Tapine           | 64  | 74 10 28 9 5 0 0 1 0 0 0 0 0 0 0 0 0
+14 | PR  | Naufahu Whyte           | 55  | 23 3 24 4 3 0 0 1 0 0 1 1 0 0 0 0 0
+15 | HK  | Erin Clark              | 35  | 17 2 3 2 1 0 0 0 0 0 0 0 0 0 0 0 0
+16 | FB  | Keano Kini              | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | SR  | Isaiah Papali'i         | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+ENG:
+1  | FB  | AJ Brimson              | 10  | 80 2 26 6 4 1 0 0 0 0 0 1 0 0 0 0 0
+2  | C   | Zach Eckersley          | 27  | 80 5 28 6 5 0 0 3 0 0 0 3 0 0 0 0 0
+3  | C   | Herbie Farnworth        | 86  | 80 7 68 7 4 0 0 4 0 0 0 0 1 2 0 0 0
+4  | 5/8 | Hugo Savala             | 27  | 80 5 50 2 4 0 0 1 0 0 0 0 0 0 3 0 0
+5  | W   | Dominic Young           | 46  | 80 1 24 0 4 0 0 1 0 0 0 0 0 1 0 0 0
+6  | HB  | George Williams         | 44  | 80 10 85 8 3 0 0 2 0 0 0 0 0 0 0 0 0
+7  | HB  | Jamie Humphreys         | 29  | 80 8 20 10 3 0 0 0 1 48 0 1 0 0 0 0 0
+8  | PR  | Max King                | 29  | 61 5 26 5 6 0 0 0 0 0 1 0 0 0 0 0 0
+9  | HK  | Brad O'Neill            | 49  | 80 12 62 25 8 1 0 1 0 0 1 1 0 0 0 0 0
+10 | PR  | Luke Thompson           | 35  | 61 8 74 7 4 2 1 2 0 0 0 0 0 0 0 0 0
+11 | SR  | Kai Pearce-Paul         | 36  | 80 8 50 9 3 0 0 2 0 0 0 1 0 0 0 0 0
+12 | SR  | Junior Nsemba           | 25  | 80 3 24 3 3 0 0 1 0 0 0 0 0 0 0 0 0
+13 | L   | Victor Radley           | 12  | 68 2 7 3 3 0 0 0 0 0 0 0 0 0 0 0 0
+14 | L   | Morgan Smithies         | 11  | 32 1 5 1 3 0 0 0 0 0 0 0 0 0 0 0 0
+15 | SR  | Matty Nicholson         | 4   | 20 1 3 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+16 | HB  | Harry Smith             | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | Ethan Havard            | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+`,
+
 "intl-13-0-0": `
 Player of the Match: AUS Fletcher Sharpe
 Team Stats:
