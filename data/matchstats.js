@@ -14,6 +14,59 @@
    ========================================================= */
 window.MATCH_STATS = {
 
+"intl-13-0-3": `
+Player of the Match: PNG Zac Laybutt
+Team Stats:
+Tries 5 - 6
+Goals 5 - 5
+Field Goals 0 - 0
+Possession 37% - 63%
+Completions 5/12 - 8/11
+Errors 7 - 3
+Penalties Conceded 0 - 0
+Tackles 57 - 27
+Missed Tackles 1 - 1
+Line Breaks 17 - 23
+
+FIJ:
+1  | FB  | Jahream Bula            | 27  | 80 3 13 4 6 0 0 0 0 0 0 0 0 0 0 0 0
+2  | W   | Maika Sivo              | 52  | 80 3 28 1 8 0 0 2 0 0 0 1 0 1 0 0 0
+3  | W   | Semi Valemei            | 73  | 80 7 127 4 3 1 0 3 0 0 2 2 0 1 0 0 0
+4  | C   | Waqa Blake              | 26  | 80 4 13 4 3 0 0 2 0 0 0 0 0 0 0 0 0
+5  | W   | Sunia Turuva            | 25  | 80 2 10 2 4 0 0 1 0 0 0 0 0 0 0 0 0
+6  | 5/8 | Kurt Donoghoe           | 49  | 80 7 68 6 3 0 0 3 1 15 2 1 0 0 0 0 0
+7  | 5/8 | Brandon Wakeham         | 52  | 80 9 106 7 3 0 0 0 0 0 0 0 0 1 5 0 0
+8  | PR  | Caleb Navale            | 34  | 69 6 39 6 4 0 0 2 0 0 0 1 0 0 0 0 0
+9  | HK  | Apisai Koroisau         | 38  | 80 8 35 15 4 0 0 0 0 0 0 1 0 1 0 0 0
+10 | PR  | Jacob Saifiti           | 40  | 69 9 103 3 6 0 0 1 0 0 0 0 0 0 0 0 0
+11 | SR  | Viliame Kikau           | 57  | 80 7 63 7 5 0 0 2 0 0 0 1 0 1 0 0 0
+12 | SR  | Siua Wong               | 30  | 80 2 35 1 5 0 0 1 0 0 1 0 0 0 0 0 0
+13 | SR  | Taane Milne             | 28  | 65 2 4 2 6 0 0 0 0 0 0 0 0 0 0 0 0
+14 | SR  | Kitione Kautoga         | 11  | 26 3 22 2 1 0 0 0 0 0 0 0 0 0 0 0 0
+15 | PR  | Mitchell Prest          | 12  | 12 3 5 3 1 0 0 0 0 0 0 0 0 0 0 0 0
+16 | W   | Jethro Rinakama         | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | SR  | Elijah Keung            | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+PNG:
+1  | FB  | Morea Morea             | 32  | 80 5 29 9 3 0 0 0 0 0 0 0 0 0 0 0 0
+2  | W   | Xavier Coates           | 54  | 80 3 30 3 3 0 0 1 0 0 0 0 0 1 0 0 0
+3  | W   | Alex Johnston           | 65  | 80 5 58 3 4 0 0 3 0 0 0 0 0 1 0 0 0
+4  | C   | Zac Laybutt             | 90  | 80 10 66 10 2 0 0 5 0 0 2 1 0 1 0 0 0
+5  | W   | Robert Derby            | 86  | 80 6 69 4 2 0 0 4 0 0 0 0 0 2 0 0 0
+6  | HB  | Kyle Laybutt            | 57  | 80 14 74 12 2 0 0 2 1 41 0 0 0 0 0 0 0
+7  | 5/8 | Lachlan Lam             | 38  | 80 18 57 17 0 0 0 1 0 0 0 1 0 0 0 0 0
+8  | PR  | Valentine Richard       | 39  | 63 10 50 9 2 0 0 1 0 0 1 0 0 0 0 0 0
+9  | HK  | Edwin Ipape             | 72  | 80 9 104 26 4 0 0 0 0 0 0 0 0 1 0 0 0
+10 | SR  | Luca Moretti            | 34  | 63 11 55 10 2 0 0 0 0 0 0 0 0 0 0 0 0
+11 | SR  | Rhyse Martin            | 66  | 80 12 101 10 2 0 0 4 0 0 2 1 0 0 5 0 0
+12 | SR  | Nixon Putt              | 45  | 80 11 32 11 1 0 0 1 0 0 1 0 0 0 0 0 0
+13 | HK  | Liam Horne              | 37  | 70 10 34 10 3 0 0 0 0 0 0 1 0 0 0 0 0
+14 | L   | Jack de Belin           | 27  | 28 5 41 4 2 0 0 1 0 0 0 0 0 0 0 0 0
+15 | PR  | Epel Kapinias           | 12  | 18 1 7 2 1 1 0 0 0 0 0 0 0 0 0 0 0
+16 | HB  | Bailey Biondi-Odo       | 8   | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | Sylvester Namo          | 8   | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+`,
+
 "intl-13-0-2": `
 Player of the Match: SAM Stephen Crichton
 Team Stats:

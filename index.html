@@ -1361,7 +1361,7 @@ function matchHtml(m,i,r,withRound){
   const nm = (t,pos) => `<span class="m-name">${esc(t.nick)}${!p&&pos?`<small class="m-pos">${esc(pos)}</small>`:""}</span>`;
   const db = !p && typeof dbH2H==="function" ? dbH2H(m) : null;   // Dingobet odds: current round only
   const odds = db ? `<a class="m-odds" href="#dingobet-${m.mid}" title="Bet on this match at Dingobet"><span class="odd">$${db.oh.toFixed(2)}</span><span class="bet"><b>dingo</b>bet<i></i></span><span class="odd">$${db.oa.toFixed(2)}</span></a>` : "";
-  return `<div class="match${p?"":" up"}"${(r.finals||r.isFinal)?` style="--accent:${FINALS_COLOUR}"`:""}${(p||(m.home!=="TBC"&&m.away!=="TBC"))&&m.mid?` data-mid="${m.mid}" onclick="if(!event.target.closest('a,button'))location.hash='match-${m.mid}'"`:""}>
+  return `<div class="match${p?"":" up"}"${(r.finals||r.isFinal)&&(!m.mid||m.mid.startsWith("draw-"))?` style="--accent:${FINALS_COLOUR}"`:""}${(p||(m.home!=="TBC"&&m.away!=="TBC"))&&m.mid?` data-mid="${m.mid}" onclick="if(!event.target.closest('a,button'))location.hash='match-${m.mid}'"`:""}>
     <div class="m-top">
       <div class="m-label">${esc(label)}</div>${m.note?`<div class="m-note">${esc(m.note)}</div>`:""}
       <div class="m-row">
@@ -1479,7 +1479,7 @@ function viewDraw(sid, arg, page="draw", sObj, only){
     const r=s.rounds[ri], base=`${page}-${s.id}-`;
     roundCtl = roundBox(base, s.rounds.map((x,i)=>({n:i+1,label:x.name,cur:i===ri})));
     body = (r.theme?`<div class="round-theme">${esc(r.theme)}</div>`:"") + r.matches.map((m,i)=>matchHtml(m,i,r)).join("");
-    themeCol = (r.finals||r.isFinal) ? FINALS_COLOUR : r.theme ? THEME_COLOURS[r.theme.trim().toLowerCase()] : null;
+    themeCol = (r.finals||r.isFinal) && page==="draw" ? FINALS_COLOUR : r.theme ? THEME_COLOURS[r.theme.trim().toLowerCase()] : null;
     if((r.byes||[]).length) body+=`<div class="bye-card"><div class="bye-label">Byes</div><div class="bye-logos">${r.byes.map(c=>logo(c)).join("")}</div></div>`;
   }
   return `<div class="draw-page"${themeCol?` style="--accent:${themeCol}"`:""}>${pageHead("Draw")}<div class="pbody">
@@ -1488,7 +1488,7 @@ function viewDraw(sid, arg, page="draw", sObj, only){
 }
 
 // themed rounds recolour the draw page's green
-const FINALS_COLOUR = "#bfa27d";   // finals games
+const FINALS_COLOUR = "#bfa27d";   // Premiership finals games (other comps keep the green)
 const THEME_COLOURS = { "multicultural round":"#12def8", "anzac round":"#c4985b", "indigenous round":"#f5680f", "women in league round":"#8d42ff" };
 const avg = arr => arr.length ? (arr.reduce((x,y)=>x+y,0)/arr.length).toFixed(1) : "-";
 const wl = (w,l) => `${w} - ${l}`;
