@@ -175,3 +175,11 @@ section.searching .pl-showall{display:none}
 .art-rp .rp-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .art-rp .rp-cta a{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-width:170px}
 @media (max-width:600px){ .art-rp .match .m-name{font-size:15px} .art-rp .match .m-side img.tlogo{width:42px;height:42px} .art-rp .match .m-score{font-size:32px} }
+
+/* full leaderboards on the stats leader cards */
+.pl-x{display:none!important}
+section.open .pl-x{display:flex!important}
+.pl-full{display:block;width:calc(100% - 36px);margin:6px 18px 14px;padding:10px;border:1px solid #ddd;border-radius:6px;background:#fff;font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink)}
+.pl-full:hover{border-color:var(--accent)}
+.pl-lead .pl-full{width:100%;margin:10px 0 0}
+section.open .pl-lr.pl-x{display:grid!important}

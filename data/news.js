@@ -14,15 +14,26 @@
    ========================================================= */
 window.NEWS_DATA = [
 
-/* Match reports: just give the match id (from its match centre link) and,
-   if you like, a cover image. The headline, summary and story are written
-   automatically from the result and the match stats. */
+/* Match reports (only for games with a cover image): give the match id
+   (from its match centre link) and the image. The headline, summary and
+   story are written automatically from the result and the match stats. */
+{ id:"monday-night-footy-s14", tag:"Draw", date:"2026-11-16",
+  title:"Monday Night Footy returns as Season 14 expands to nine games a round",
+  summary:"The Bears' return means an extra game every week, and two rounds will finish under Monday night lights.",
+  image:"img/news/monday-night-footy-s14.webp", imagePos:"center 25%",
+  body:[
+  "Monday Night Footy is coming back. With the Perth Bears re-entering the competition, Season 14 grows from eight games a round to nine, and the extra fixture will change the shape of the week.",
+  "## A new Sunday twilight slot",
+  "In a standard round the ninth game will be played on Sunday at 6:15pm, closing out the weekend after the afternoon games.",
+  "## Monday nights after Origin",
+  "Monday Night Footy will make two appearances in Season 14, in **Round 8** and **Round 14**. Those rounds follow Games 1 and 3 of State of Origin, so there will be no Thursday night game in either week. It's the same approach the competition took with the Season 10 fixtures.",
+  "The Monday games haven't been confirmed yet, but expect the competition to go big. Monday crowds are harder to draw than a Friday or Saturday, so the schedulers are tipped to give those slots marquee match-ups to pull the biggest attendances they can.",
+  "## When will the draw be released?",
+  "Reports suggest the full Season 14 draw is complete, with the official release planned for the end of the Season 13 International Series. Until then, don't be surprised if a few fixtures leak out."
+  ]},
+
 { id:"report-ton-eng-s13-r2", tag:"International", date:"2026-11-16", report:"intl-13-1-0",
   image:"img/news/ton-eng-s13-r2.webp", imagePos:"center 22%" },
-{ id:"report-fij-png-s13-r1", tag:"International", date:"2026-11-15", report:"intl-13-0-3" },
-{ id:"report-sam-cok-s13-r1", tag:"International", date:"2026-11-14", report:"intl-13-0-2" },
-{ id:"report-nzl-eng-s13-r1", tag:"International", date:"2026-11-14", report:"intl-13-0-1" },
-{ id:"report-aus-ton-s13-r1", tag:"International", date:"2026-11-12", report:"intl-13-0-0" },
 
 { id:"dingobet-launch", tag:"Dingobet", date:"2026-11-11",
   title:"Dingobet opens: back your team with Dingo Dollars",

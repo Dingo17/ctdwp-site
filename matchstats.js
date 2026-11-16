@@ -188,7 +188,7 @@ function msIntlPlayers(sid){
 function viewIntlPlayerStats(sidArg, codeArg){
   const seasons=msIntlSeasons();
   const viewDD=dd({cls:"f-view",label:"View",trigger:`<span class="lbl">Players</span>`,items:[{href:"stats",label:"Teams"},{href:"stats-players",label:"Players",sel:true}]});
-  const compDD=dd({cls:"f-comp",label:"Competition",trigger:`<span class="lbl">International Series</span>`,items:[{href:"stats-players",label:"Premiership"},{href:"stats-players-intl",label:"International Series",sel:true}]});
+  const compDD=plCompDD("intl");
   if(!seasons.length) return `${pageHead("Stats")}<div class="pbody"><div class="filters">${viewDD}${compDD}</div><div class="empty">No International Series match stats yet.</div></div>`;
   const sid=seasons.includes(+sidArg)?+sidArg:seasons[seasons.length-1];
   const all=msIntlPlayers(sid), codes=[...new Set(all.map(p=>p.code))].sort((a,b)=>team(a).nick.localeCompare(team(b).nick));
@@ -203,12 +203,12 @@ function viewIntlPlayerStats(sidArg, codeArg){
 
   const fmt1=v=>Number.isInteger(v)?v.toLocaleString():v.toFixed(1);
   const cat=(title,f,unit,opts={})=>{
-    const list=played.map(p=>({p,v:f(p)})).filter(x=>x.v!=null&&x.v>0&&(!opts.min||x.p.gp>=opts.min)).sort((a,b)=>b.v-a.v||a.p.name.localeCompare(b.p.name)).slice(0,5);
+    const list=played.map(p=>({p,v:f(p)})).filter(x=>x.v!=null&&x.v>0&&(!opts.min||x.p.gp>=opts.min)).sort((a,b)=>b.v-a.v||a.p.name.localeCompare(b.p.name));
     if(!list.length) return "";
     const L=list[0], col=(window.CLUB_BG&&CLUB_BG[L.p.code])||"#111";
     return `<section class="msl-card"><h3>${esc(title)}</h3>
       <div class="msl-lead" style="--tc:${col}">${logo(L.p.code,"lg")}<div><b>${esc(L.p.name)}</b><span>${esc(team(L.p.code).nick)}</span></div><em>${fmt1(L.v)}<small>${unit}</small></em></div>
-      <ol class="msl-list">${list.slice(1).map((x,i)=>`<li><span class="r">${i+2}</span>${logo(x.p.code,"sm")}<span class="n">${esc(x.p.name)}</span><b>${fmt1(x.v)}</b></li>`).join("")}</ol></section>`; };
+      <ol class="msl-list">${list.slice(1).map((x,i)=>`<li${i>=4?' class="pl-x"':""}><span class="r">${i+2}</span>${logo(x.p.code,"sm")}<span class="n">${esc(x.p.name)}</span><b>${fmt1(x.v)}</b></li>`).join("")}</ol>${plMore(list.length,5)}</section>`; };
   const cards=`<h2 class="st-h">Leaders</h2><div class="msl-grid">
     ${cat("Tries",p=>p.tries,"tries")}${cat("Points",p=>p.pts,"pts")}${cat("Goals",p=>p.goals,"goals")}
     ${cat("Try Assists",p=>p.ta,"assists")}${cat("Line Breaks",p=>p.lb,"breaks")}${cat("Run Metres",p=>p.arm,"m")}

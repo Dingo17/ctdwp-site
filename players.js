@@ -37,13 +37,20 @@ function plAll(){   // career totals across every season, matched by name
     o.seasons++; o.T+=r.T; o.G+=r.G; o.F1+=r.F1; o.F2+=r.F2; o.FG+=r.FG; o.Pts+=r.Pts; o.DM+=r.DM||0; if(!o.clubs.includes(r.code)) o.clubs.push(r.code); o.code=r.code; if(r.pos) o.pos=r.pos; }));
   return Object.values(by).map(o=>({...o, DM:o.DM||null}));
 }
+function plCompDD(id){
+  const list=COMPS.filter(c=>c.id==="ctdwp"||c.id==="intl"), cur=list.find(c=>c.id===id)||list[0];
+  return dd({cls:"f-comp",label:"Competition",trigger:`${ico(cur.icon)}<span class="lbl">${esc(cur.name)}</span>`,
+    items:list.map(c=>({href:c.id==="intl"?"stats-players-intl":"stats-players",label:c.name,icon:ico(c.icon),sel:c===cur}))});
+}
+// leader cards show the top few; "View full list" opens the whole leaderboard in place
+function plMore(n, shown){ return n>shown?`<button class="pl-full" onclick="const s=this.closest('section');s.classList.toggle('open');this.textContent=s.classList.contains('open')?'Show top ${shown}':'View full list (${n})'">View full list (${n})</button>`:""; }
 function plLeader(title, rows, f, opts={}){
   const list=rows.map(r=>({r,v:f(r)})).filter(x=>x.v!=null&&x.v>0).sort((a,b)=>b.v-a.v||(b.r.Pts-a.r.Pts));
-  const top=list.slice(0,opts.n||5); if(!top.length) return "";
+  const shown=opts.n||5, top=list; if(!top.length) return "";
   const max=top[0].v||1;
   return `<section class="mc-card st-lead pl-lead"><h3 class="mc-h">${esc(title)}</h3>
-    ${top.map((x,i)=>`<div class="pl-lr${i===0?" first":""}"><span class="st-rank">${i+1}</span>${logo(x.r.code,"sm")}<span class="pl-nm"><b>${esc(x.r.name)}</b><small>${esc(team(x.r.code).nick)}${x.r.pos?" · "+esc(PL_POS[x.r.pos]||x.r.pos):""}</small></span><span class="st-bar"><i style="width:${Math.max(4,x.v/max*100)}%"></i></span><b class="pl-v">${opts.fmt?opts.fmt(x.v,x.r):x.v}</b></div>`).join("")}
-    ${opts.note?`<div class="mc-line sm">${esc(opts.note)}</div>`:""}</section>`;
+    ${top.map((x,i)=>`<div class="pl-lr${i===0?" first":""}${i>=shown?" pl-x":""}"><span class="st-rank">${i+1}</span>${logo(x.r.code,"sm")}<span class="pl-nm"><b>${esc(x.r.name)}</b><small>${esc(team(x.r.code).nick)}${x.r.pos?" · "+esc(PL_POS[x.r.pos]||x.r.pos):""}</small></span><span class="st-bar"><i style="width:${Math.max(4,x.v/max*100)}%"></i></span><b class="pl-v">${opts.fmt?opts.fmt(x.v,x.r):x.v}</b></div>`).join("")}
+    ${plMore(list.length,shown)}${opts.note?`<div class="mc-line sm">${esc(opts.note)}</div>`:""}</section>`;
 }
 const TOS_POS=["Fullback","Winger","Centre","Centre","Winger","Five-Eighth","Halfback","Prop","Hooker","Prop","Second Row","Second Row","Lock"];
 function awardsParse(sid){
@@ -86,7 +93,7 @@ function viewPlayerStats(sidArg, clubArg){
     items:[...(seasons.length>1?[{href:`stats-players-all${sfx}`,label:"All Seasons",sel:sid==="all"}]:[]), ...seasons.slice().reverse().map(s=>({href:`stats-players-${s}${sfx}`,label:"Season "+s,sel:s===sid}))]});
   const clubDD=dd({cls:"f-team",label:"Club",tiles:true,cols:3,trigger:club?`${logo(club,"sm")}<span class="lbl">${esc(team(club).nick)}</span>`:`<span class="lbl">All Clubs</span>`,
     items:[{href:`stats-players-${sid}`,label:"All Clubs",sel:!club}, ...clubs.map(c=>({href:`stats-players-${sid}-${c}`,label:team(c).nick,icon:logo(c,"sm"),sel:c===club}))]});
-  const compDD=dd({cls:"f-comp",label:"Competition",trigger:`<span class="lbl">Premiership</span>`,items:[{href:"stats-players",label:"Premiership",sel:true},{href:"stats-players-intl",label:"International Series"}]});
+  const compDD=plCompDD("ctdwp");
   const head=`${pageHead("Stats")}<div class="pbody"><div class="filters">${viewDD}${compDD}${seasonDD}${clubDD}<input class="pp-search pl-search" type="search" placeholder="Search players" oninput="plFilter(this)"></div>`;
 
   const sum=f=>rows.reduce((a,r)=>a+f(r),0);
