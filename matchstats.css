@@ -159,3 +159,8 @@
 .msl-full .ms-hint{padding:0 18px}
 .msl-full .ms-tbl{min-width:1600px}
 .msl-full .ms-tbl td img.tlogo{width:26px;height:26px;vertical-align:middle}
+
+/* floating copy of a stats table's header row */
+.sh-float{position:fixed;z-index:24;overflow:hidden;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.12);display:none;pointer-events:auto}
+.sh-float table{margin:0}
+.sh-float tbody{visibility:hidden}

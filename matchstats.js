@@ -223,3 +223,55 @@ function viewIntlPlayerStats(sidArg, codeArg){
     <tbody>${list.map((p,i)=>`<tr data-i="${i}" class="${p.gp?"":"dnp"}"><td class="pl" data-v="${esc(p.name)}">${esc(p.name)}</td><td data-v="${esc(team(p.code).nick)}">${logo(p.code,"sm")}</td>${C.map(([k])=>{ const v=p[k]; return `<td data-v="${v==null?-1:v}">${v==null?"–":k==="rating"?v.toFixed(1):v||"-"}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div></section>`;
   return head+cards+table+`</div>`;
 }
+
+/* =========================================================
+   Floating stat headers: when you scroll down a long stats table and its
+   header row goes off screen, a copy of the header drops down at the top.
+   Works for the match centre player stats and the Stats page tables.
+   ========================================================= */
+const SH={items:[], layer:null, t:null};
+const SH_SEL="table.ms-tbl, table.st-table, table.pl-table";
+function shTop(){ let t=window.innerWidth<=860?56:0; const s=document.querySelector(".mc-sticky.on"); if(s){ const b=(parseFloat(getComputedStyle(s).top)||0)+s.offsetHeight; if(b>t) t=b; } return t; }
+function shClear(){ SH.items.forEach(it=>{ if(it.f) it.f.remove(); if(it.wrap&&it.onScroll) it.wrap.removeEventListener("scroll",it.onScroll); }); SH.items=[]; }
+function shScan(){
+  shClear();
+  if(!SH.layer){ SH.layer=document.createElement("div"); SH.layer.id="shLayer"; document.body.appendChild(SH.layer); }
+  document.querySelectorAll(SH_SEL).forEach(tb=>{
+    if(!tb.tHead||!tb.tBodies[0]||tb.tBodies[0].rows.length<8||tb.closest(".sh-float")) return;
+    const wrap=tb.parentElement, it={tb, wrap, f:null};
+    it.onScroll=()=>{ if(it.f) it.f.scrollLeft=wrap.scrollLeft; };
+    wrap.addEventListener("scroll",it.onScroll,{passive:true});
+    SH.items.push(it);
+  });
+  shUpdate();
+}
+function shBuild(it){
+  if(it.f) it.f.remove();
+  const f=document.createElement("div"); f.className="sh-float";
+  const clone=it.tb.cloneNode(true); clone.removeAttribute("id"); clone.querySelectorAll("[onclick]").forEach(e=>e.removeAttribute("onclick")); f.appendChild(clone);
+  f.addEventListener("click",e=>{ const th=e.target.closest("th"); if(!th) return;
+    const i=[...clone.tHead.querySelectorAll("th")].indexOf(th), src=[...it.tb.tHead.querySelectorAll("th")][i]; if(!src) return;
+    (src.querySelector("button")||src).click(); setTimeout(()=>{ shBuild(it); shUpdate(); },0); });
+  SH.layer.appendChild(f); it.f=f; it.w=it.tb.offsetWidth;
+}
+function shUpdate(){
+  const top=shTop();
+  SH.items.forEach(it=>{
+    const tb=it.tb; if(!tb.isConnected||!tb.offsetParent){ if(it.f) it.f.style.display="none"; return; }
+    const hr=tb.tHead.getBoundingClientRect(), r=tb.getBoundingClientRect(), wr=it.wrap.getBoundingClientRect();
+    const show = hr.top<top && r.bottom-hr.height>top+8;
+    if(!show){ if(it.f) it.f.style.display="none"; return; }
+    if(!it.f||it.w!==tb.offsetWidth) shBuild(it);
+    const f=it.f; f.style.display="block"; f.style.top=top+"px"; f.style.left=wr.left+"px"; f.style.width=wr.width+"px"; f.style.height=hr.height+"px";
+    f.scrollLeft=it.wrap.scrollLeft;
+  });
+}
+let shRaf=0; window.addEventListener("scroll",()=>{ cancelAnimationFrame(shRaf); shRaf=requestAnimationFrame(shUpdate); },{passive:true});
+window.addEventListener("resize",()=>{ SH.items.forEach(it=>{ if(it.f){ it.f.remove(); it.f=null; } }); shUpdate(); });
+document.addEventListener("DOMContentLoaded",()=>{
+  const app=document.getElementById("app"); if(!app) return;
+  new MutationObserver(()=>{ clearTimeout(SH.t); SH.t=setTimeout(shScan,120); }).observe(app,{childList:true,subtree:true});
+  // table rows re-ordered by sorting, or a tab switched: refresh the copy
+  app.addEventListener("click",()=>setTimeout(()=>{ SH.items.forEach(it=>{ if(it.f){ it.f.remove(); it.f=null; } }); shUpdate(); },30));
+  shScan();
+});
