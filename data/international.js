@@ -84,7 +84,7 @@ AUS 14 - 12 TON - Suncorp Stadium, Brisbane
 NZL 36 - 18 ENG - Go Media Stadium, Auckland
 
 Round 2:
-TON V ENG - HBF Park, Perth - Friday 8:10pm
+TON 60 - 8 ENG - HBF Park, Perth
 NZL V AUS - Eden Park, Auckland - Saturday 4:05pm
 
 Round 3:

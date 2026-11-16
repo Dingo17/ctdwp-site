@@ -136,14 +136,14 @@ function msPlayerStats(MS, m){
 }
 // sort the player table: first tap = highest first, second tap = lowest first
 function msSort(th){
-  const card=th.closest(".ms-full"), k=th.dataset.k, text=k==="pl"||k==="pos";
+  const card=th.closest(".ms-full"), k=th.dataset.k, text=k==="pl"||k==="pos"||k==="team";
   const dir = th.dataset.dir==="d" ? "a" : th.dataset.dir==="a" ? "d" : (text?"a":"d");
   card.querySelectorAll("th.srt").forEach(x=>{ x.classList.remove("on"); delete x.dataset.dir; });
   card.querySelectorAll(`th.srt[data-k="${k}"]`).forEach(x=>{ x.classList.add("on"); x.dataset.dir=dir; });
   card.querySelectorAll(".ms-tbl").forEach(tb=>{
-    const idx=[...tb.querySelectorAll("thead tr:last-child th")].findIndex(x=>x.dataset.k===k), body=tb.tBodies[0];
-    const val=tr=>{ const td=k==="pl"?tr.cells[0]:tr.cells[idx+1]; const v=td.dataset.v; return text&&k==="pl"?v:+v; };
-    const keepDnp=!["pl","pos","no"].includes(k);
+    const hdr=[...tb.querySelectorAll("thead tr:last-child th")], one=tb.tHead.rows.length===1, idx=hdr.findIndex(x=>x.dataset.k===k), body=tb.tBodies[0];
+    const val=tr=>{ const td=k==="pl"?tr.cells[0]:tr.cells[one?idx:idx+1]; const v=td.dataset.v; return (k==="pl"||k==="team")?v:+v; };
+    const keepDnp=!["pl","pos","no","team"].includes(k);
     [...body.rows].sort((a,b)=>{ if(keepDnp){ const d=a.classList.contains("dnp")-b.classList.contains("dnp"); if(d) return d; } const x=val(a), y=val(b); const c=typeof x==="string"?x.localeCompare(y):(x-y); return (dir==="a"?c:-c)||(+a.dataset.i-+b.dataset.i); }).forEach(r=>body.appendChild(r)); });
   card.classList.add("sorted");
 }
@@ -163,4 +163,63 @@ function msTeamLists(MS, m){
                             : [["",ps.filter(p=>p.mins>0)],["Did not take the field",ps.filter(p=>p.mins===0)]];
     return `<div class="ms-tlc"><div class="ms-tlh">${logo(code,"sm")}<b>${esc(team(code).nick)}</b></div>${groups.filter(g=>g[1].length).map(([h,l])=>`${h?`<div class="mc-sub">${h}</div>`:""}${l.map(row).join("")}`).join("")}</div>`; };
   return `<section class="mc-card"><h3 class="mc-h">Team Lists</h3><div class="ms-tl">${side(m.home)}${side(m.away)}</div></section>`;
+}
+
+/* =========================================================
+   International Series player stats (Stats → Players → International Series)
+   Built from every International Series game with match stats.
+   ========================================================= */
+function msIntlSeasons(){ return [...new Set(Object.keys(window.MATCH_STATS||{}).filter(k=>/^intl-\d+-/.test(k)).map(k=>+k.split("-")[1]))].sort((a,b)=>a-b); }
+function msIntlPlayers(sid){
+  const P={};
+  Object.keys(window.MATCH_STATS||{}).filter(k=>k.startsWith(`intl-${sid}-`)).forEach(mid=>{
+    const MS=msGet(mid); if(!MS) return;
+    Object.entries(MS.players).forEach(([code,ps])=>ps.forEach(p=>{
+      const key=code+"|"+p.name, x=P[key]||(P[key]={name:p.name, code, gp:0, mins:0, pts:0, tries:0, goals:0, fg:0, ar:0, arm:0, lb:0, tb:0, ta:0, t:0, mt:0, k:0, kmg:0, err:0, pen:0, pass:0, rsum:0, rn:0, potm:0, roles:{}});
+      if(p.mins>0){ x.gp++; x.roles[p.role]=(x.roles[p.role]||0)+1; }
+      x.mins+=p.mins; x.pts+=p.pts; x.tries+=p.tries; x.goals+=p.c+p.pg; x.fg+=p.fg;
+      ["ar","arm","lb","tb","ta","t","mt","k","kmg","err","pen","pass"].forEach(c=>x[c]+=p[c]);
+      if(p.rating!=null&&p.mins>0){ x.rsum+=p.rating; x.rn++; }
+      if(MS.potm&&MS.potm.name===p.name&&MS.potm.code===code) x.potm++;
+    }));
+  });
+  return Object.values(P).map(x=>({...x, rating:x.rn?Math.round(x.rsum/x.rn*10)/10:null, role:Object.entries(x.roles).sort((a,b)=>b[1]-a[1])[0]?.[0]||""}));
+}
+function viewIntlPlayerStats(sidArg, codeArg){
+  const seasons=msIntlSeasons();
+  const viewDD=dd({cls:"f-view",label:"View",trigger:`<span class="lbl">Players</span>`,items:[{href:"stats",label:"Teams"},{href:"stats-players",label:"Players",sel:true}]});
+  const compDD=dd({cls:"f-comp",label:"Competition",trigger:`<span class="lbl">International Series</span>`,items:[{href:"stats-players",label:"Premiership"},{href:"stats-players-intl",label:"International Series",sel:true}]});
+  if(!seasons.length) return `${pageHead("Stats")}<div class="pbody"><div class="filters">${viewDD}${compDD}</div><div class="empty">No International Series match stats yet.</div></div>`;
+  const sid=seasons.includes(+sidArg)?+sidArg:seasons[seasons.length-1];
+  const all=msIntlPlayers(sid), codes=[...new Set(all.map(p=>p.code))].sort((a,b)=>team(a).nick.localeCompare(team(b).nick));
+  const code=codeArg&&codes.includes(codeArg.toUpperCase())?codeArg.toUpperCase():null;
+  const rows=code?all.filter(p=>p.code===code):all, played=rows.filter(p=>p.gp>0);
+  const games=Object.keys(MATCH_STATS).filter(k=>k.startsWith(`intl-${sid}-`)).length;
+  const seasonDD=dd({cls:"f-season",label:"Season",tiles:true,cols:4,trigger:`<span class="lbl">Season ${sid}</span>`,items:seasons.slice().reverse().map(s=>({href:`stats-players-intl-${s}${code?"-"+code:""}`,label:"Season "+s,sel:s===sid}))});
+  const teamDD=dd({cls:"f-team",label:"Nation",tiles:true,cols:3,trigger:code?`${logo(code,"sm")}<span class="lbl">${esc(team(code).nick)}</span>`:`<span class="lbl">All Nations</span>`,
+    items:[{href:`stats-players-intl-${sid}`,label:"All Nations",sel:!code},...codes.map(c=>({href:`stats-players-intl-${sid}-${c}`,label:team(c).nick,icon:logo(c,"sm"),sel:c===code}))]});
+  const head=`${pageHead("Stats")}<div class="pbody"><div class="filters">${viewDD}${compDD}${seasonDD}${teamDD}</div>
+    <p class="msl-note">Season ${sid} International Series · ${games} game${games===1?"":"s"} with match stats${code?` · ${esc(team(code).nick)}`:""}</p>`;
+
+  const fmt1=v=>Number.isInteger(v)?v.toLocaleString():v.toFixed(1);
+  const cat=(title,f,unit,opts={})=>{
+    const list=played.map(p=>({p,v:f(p)})).filter(x=>x.v!=null&&x.v>0&&(!opts.min||x.p.gp>=opts.min)).sort((a,b)=>b.v-a.v||a.p.name.localeCompare(b.p.name)).slice(0,5);
+    if(!list.length) return "";
+    const L=list[0], col=(window.CLUB_BG&&CLUB_BG[L.p.code])||"#111";
+    return `<section class="msl-card"><h3>${esc(title)}</h3>
+      <div class="msl-lead" style="--tc:${col}">${logo(L.p.code,"lg")}<div><b>${esc(L.p.name)}</b><span>${esc(team(L.p.code).nick)}</span></div><em>${fmt1(L.v)}<small>${unit}</small></em></div>
+      <ol class="msl-list">${list.slice(1).map((x,i)=>`<li><span class="r">${i+2}</span>${logo(x.p.code,"sm")}<span class="n">${esc(x.p.name)}</span><b>${fmt1(x.v)}</b></li>`).join("")}</ol></section>`; };
+  const cards=`<h2 class="st-h">Leaders</h2><div class="msl-grid">
+    ${cat("Tries",p=>p.tries,"tries")}${cat("Points",p=>p.pts,"pts")}${cat("Goals",p=>p.goals,"goals")}
+    ${cat("Try Assists",p=>p.ta,"assists")}${cat("Line Breaks",p=>p.lb,"breaks")}${cat("Run Metres",p=>p.arm,"m")}
+    ${cat("All Runs",p=>p.ar,"runs")}${cat("Tackle Busts",p=>p.tb,"busts")}${cat("Tackles",p=>p.t,"tackles")}
+    ${cat("Kicking Metres",p=>p.kmg,"m")}${cat("Average Player Rating",p=>p.rating,"avg")}${cat("Player of the Match",p=>p.potm,"awards")}</div>`;
+
+  // every player, sortable like the match centre tables
+  const C=[["gp","Games"],["mins","Mins"],["pts","Points"],["tries","Tries"],["goals","Goals"],["fg","Field Goals"],["ar","All Runs"],["arm","Run Metres"],["lb","Line Breaks"],["tb","Tackle Busts"],["ta","Try Assists"],["pass","Passes"],["t","Tackles"],["mt","Missed Tackles"],["k","Kicks"],["kmg","Kick Metres"],["err","Errors"],["pen","Penalties"],["rating","Avg Rating"],["potm","POTM"]];
+  const list=rows.slice().sort((a,b)=>b.pts-a.pts||b.tries-a.tries||b.arm-a.arm);
+  const table=`<section class="mc-card ms-full msl-full"><div class="ms-ctl"><h3 class="mc-h" style="margin:0">${code?esc(team(code).nick)+" players":"Every player"}</h3><button class="ms-reset" onclick="msSortReset(this)">↺ Default order</button></div><div class="ms-hint">Tap a stat to sort</div>
+    <div class="ms-tblw show"><table class="ms-tbl"><thead><tr><th class="pl srt" data-k="pl" onclick="msSort(this)">Player</th><th class="srt" data-k="team" onclick="msSort(this)">Nation</th>${C.map(([k,l])=>`<th class="srt" data-k="${k}" onclick="msSort(this)">${l}</th>`).join("")}</tr></thead>
+    <tbody>${list.map((p,i)=>`<tr data-i="${i}" class="${p.gp?"":"dnp"}"><td class="pl" data-v="${esc(p.name)}">${esc(p.name)}</td><td data-v="${esc(team(p.code).nick)}">${logo(p.code,"sm")}</td>${C.map(([k])=>{ const v=p[k]; return `<td data-v="${v==null?-1:v}">${v==null?"–":k==="rating"?v.toFixed(1):v||"-"}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div></section>`;
+  return head+cards+table+`</div>`;
 }

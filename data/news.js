@@ -14,6 +14,16 @@
    ========================================================= */
 window.NEWS_DATA = [
 
+/* Match reports: just give the match id (from its match centre link) and,
+   if you like, a cover image. The headline, summary and story are written
+   automatically from the result and the match stats. */
+{ id:"report-ton-eng-s13-r2", tag:"International", date:"2026-11-16", report:"intl-13-1-0",
+  image:"img/news/ton-eng-s13-r2.webp", imagePos:"center 22%" },
+{ id:"report-fij-png-s13-r1", tag:"International", date:"2026-11-15", report:"intl-13-0-3" },
+{ id:"report-sam-cok-s13-r1", tag:"International", date:"2026-11-14", report:"intl-13-0-2" },
+{ id:"report-nzl-eng-s13-r1", tag:"International", date:"2026-11-14", report:"intl-13-0-1" },
+{ id:"report-aus-ton-s13-r1", tag:"International", date:"2026-11-12", report:"intl-13-0-0" },
+
 { id:"dingobet-launch", tag:"Dingobet", date:"2026-11-11",
   title:"Dingobet opens: back your team with Dingo Dollars",
   summary:"Odds on every game of the round, season futures, Same Game Multis and a leaderboard of computer punters. Just for fun, with no real money.",

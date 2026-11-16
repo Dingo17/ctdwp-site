@@ -990,6 +990,19 @@ TEAMS.forEach(t => { t.logo = `logos/${t.code}.svg`; t.ladderLogo = SECONDARY.in
 /* (SEASONS is defined below the helpers) */
 
 const NEWS = window.NEWS_DATA || [];
+// news items with report:"<match id>" are written from that game's match report
+let NEWS_READY=false;
+function newsInit(){
+  if(NEWS_READY) return; NEWS_READY=true;
+  NEWS.forEach(n=>{ if(!n.report||typeof viewReport!=="function") return;
+    let R=null; try{ R=viewReport(n.report,true); }catch(e){}
+    if(!R||typeof R!=="object"){ n.title=n.title||"Match report"; n.body=n.body||[]; return; }
+    const strip=h=>String(h).replace(/<[^>]+>/g,"");
+    n.title=n.title||R.headline; n.summary=n.summary||strip(R.P[0]); n.tag=n.tag||"Match Report";
+    if(!n.image&&!n.art) n.art={logos:[R.home,R.away], bg:"#0b0b0b"};
+    n.html=`${R.card}<div class="rp-body">${R.P.map(p=>`<p>${p}</p>`).join("")}${R.IMP.length?`<h2>What it means</h2>${R.IMP.map(p=>`<p>${p}</p>`).join("")}`:""}</div>
+      <h2 class="rp-h">By the numbers</h2>${R.nums}<div class="rp-cta"><a class="m-btn fill" href="#match-${n.report}">Match Stats</a><a class="m-btn" href="#report-${n.report}">Full Match Report</a></div>`; });
+}
 
 /* =========================================================
    Helpers
@@ -1229,7 +1242,7 @@ function newsCard(n){
   return `<a class="card" href="#article-${n.id}">${thumb(n)}<div class="body"><span class="tag">${esc(n.tag)}</span><h3>${esc(n.title)}</h3><span class="meta">${fmtShort(n.date)}</span></div></a>`;
 }
 function heroBlock(){
-  const [main,...rest]=NEWS; if(!main) return "";
+  newsInit(); const [main,...rest]=NEWS; if(!main) return "";
   return `<div class="hero">
     <a class="hero-main on-dark" href="#article-${main.id}">${thumb(main)}
       <div class="overlay"><span class="tag">${esc(main.tag)}</span><h2>${esc(main.title)}</h2><div class="meta">${fmtShort(main.date)}</div></div></a>
@@ -1317,11 +1330,11 @@ function moreNews(n){
   return `<div class="more-news"><h2 class="section-title">More News</h2><div class="grid">${more.map(newsCard).join("")}</div></div>`;
 }
 function viewArticle(id){
-  const n=NEWS.find(x=>x.id===id); if(!n) return viewNews();
+  newsInit(); const n=NEWS.find(x=>x.id===id); if(!n) return viewNews();
   return `<article class="article"><a class="back" href="#news">‹ All news</a>
     <div style="margin-top:18px"><span class="tag">${esc(n.tag)}</span></div>
     <h1>${esc(n.title)}</h1><div class="meta">${fmtShort(n.date)}</div>
-    ${n.summary?`<p class="art-sum">${esc(n.summary)}</p>`:""}${thumb(n,1)}<div class="content">${(n.body||[]).map(newsPara).join("")}</div>
+    ${n.summary&&!n.html?`<p class="art-sum">${esc(n.summary)}</p>`:""}${thumb(n,1)}<div class="content${n.html?" rp art-rp":""}">${n.html||(n.body||[]).map(newsPara).join("")}</div>
     ${moreNews(n)}</article>`;
 }
 
@@ -2863,6 +2876,7 @@ function viewPool(sid, club){
 
 let lastPage="";
 function render(keepScroll){
+  try{ newsInit(); }catch(e){}
   const h=(location.hash||"#home").slice(1), parts=h.split("-");
   // remember how far each ladder table is scrolled sideways, so changing round keeps the same spot
   const sideScroll=[...document.querySelectorAll(".lad-wrap,.ladder-wrap")].map(e=>e.scrollLeft), samePage=lastPage===parts[0];
@@ -2889,7 +2903,7 @@ function render(keepScroll){
   else if(parts[0]==="power"){ html=viewPower(parts[1],parts[2]); nav="power"; }
   else if(parts[0]==="dingobet"){ html=viewDingobet(h.slice(9)); nav="dingobet"; }
   else if(parts[0]==="pool"){ html=viewPool(parts[1],parts[2]); nav="pool"; }
-  else if(parts[0]==="stats"){ html=parts[1]==="players"?viewPlayerStats(parts[2],parts[3]):viewStats(parts[1],parts[2]); nav="stats"; }
+  else if(parts[0]==="stats"){ html=parts[1]==="players"?(parts[2]==="intl"?viewIntlPlayerStats(parts[3],parts[4]):viewPlayerStats(parts[2],parts[3])):viewStats(parts[1],parts[2]); nav="stats"; }
   else if(parts[0]==="clubs"){ html=viewClubs(); nav="clubs"; }
   else if(parts[0]==="records"){ html=viewRecords(parts[1]); nav="records"; }
   else if(parts[0]==="account"){ html=viewAccount(); nav="account"; }

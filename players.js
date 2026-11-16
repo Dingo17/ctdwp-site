@@ -86,7 +86,8 @@ function viewPlayerStats(sidArg, clubArg){
     items:[...(seasons.length>1?[{href:`stats-players-all${sfx}`,label:"All Seasons",sel:sid==="all"}]:[]), ...seasons.slice().reverse().map(s=>({href:`stats-players-${s}${sfx}`,label:"Season "+s,sel:s===sid}))]});
   const clubDD=dd({cls:"f-team",label:"Club",tiles:true,cols:3,trigger:club?`${logo(club,"sm")}<span class="lbl">${esc(team(club).nick)}</span>`:`<span class="lbl">All Clubs</span>`,
     items:[{href:`stats-players-${sid}`,label:"All Clubs",sel:!club}, ...clubs.map(c=>({href:`stats-players-${sid}-${c}`,label:team(c).nick,icon:logo(c,"sm"),sel:c===club}))]});
-  const head=`${pageHead("Stats")}<div class="pbody"><div class="filters">${viewDD}${seasonDD}${clubDD}<input class="pp-search pl-search" type="search" placeholder="Search players" oninput="plFilter(this)"></div>`;
+  const compDD=dd({cls:"f-comp",label:"Competition",trigger:`<span class="lbl">Premiership</span>`,items:[{href:"stats-players",label:"Premiership",sel:true},{href:"stats-players-intl",label:"International Series"}]});
+  const head=`${pageHead("Stats")}<div class="pbody"><div class="filters">${viewDD}${compDD}${seasonDD}${clubDD}<input class="pp-search pl-search" type="search" placeholder="Search players" oninput="plFilter(this)"></div>`;
 
   const sum=f=>rows.reduce((a,r)=>a+f(r),0);
   const tile=(v,l,sub)=>`<div class="club-tile"><b>${v}</b><span>${esc(l)}</span>${sub?`<small>${sub}</small>`:""}</div>`;

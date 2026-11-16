@@ -165,3 +165,13 @@ section.searching .pl-showall{display:none}
   .rp h1{font-size:28px}
   .rp-body{font-size:16px}
 }
+
+/* match reports shown as news articles */
+.art-rp{margin-top:22px}
+.art-rp .match{margin:0 0 18px}
+.art-rp .match .m-name{font-size:18px}
+.art-rp .match .m-side img.tlogo{width:56px;height:56px}
+.art-rp .match .m-score{font-size:40px}
+.art-rp .rp-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.art-rp .rp-cta a{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-width:170px}
+@media (max-width:600px){ .art-rp .match .m-name{font-size:15px} .art-rp .match .m-side img.tlogo{width:42px;height:42px} .art-rp .match .m-score{font-size:32px} }

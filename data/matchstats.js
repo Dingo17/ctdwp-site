@@ -14,6 +14,59 @@
    ========================================================= */
 window.MATCH_STATS = {
 
+"intl-13-1-0": `
+Player of the Match: TON Tolutau Koula
+Team Stats:
+Tries 10 - 2
+Goals 10 - 0
+Field Goals 0 - 0
+Possession 59% - 41%
+Completions 11/16 - 5/8
+Errors 6 - 3
+Penalties Conceded 0 - 0
+Tackles 41 - 47
+Missed Tackles 1 - 4
+Line Breaks 27 - 21
+
+TON:
+1  | W   | Lehi Hopoate            | 95  | 80 8 132 8 4 1 0 1 0 0 0 0 0 1 0 0 0
+2  | W   | Dallin Watene-Zelezniak | 123 | 80 6 120 5 3 0 0 4 0 0 2 0 0 2 0 0 0
+3  | C   | Tolutau Koula           | 140 | 80 10 192 8 1 0 0 5 0 0 2 1 0 2 0 0 0
+4  | C   | Robert Toia             | 56  | 80 4 9 3 3 0 0 0 0 0 1 0 0 0 0 0 0
+5  | W   | Jojo Fifita             | 103 | 80 7 151 5 0 0 0 6 0 0 0 0 0 1 0 0 0
+6  | C   | Kotoni Staggs           | 129 | 80 16 145 12 3 0 0 2 0 0 1 0 0 2 0 0 0
+7  | HB  | Isaiya Katoa            | 98  | 80 14 179 11 4 0 0 1 1 37 0 0 0 1 10 0 0
+8  | PR  | Addin Fonua-Blake       | 65  | 61 8 50 4 2 0 0 2 0 0 1 0 0 0 0 0 0
+9  | HK  | Soni Luke               | 76  | 80 13 90 20 5 0 0 1 0 0 0 0 0 0 0 0 0
+10 | L   | Jason Taumalolo         | 50  | 61 3 9 4 4 0 0 0 0 0 0 0 0 0 0 0 0
+11 | SR  | Haumole Olakau'atu      | 96  | 80 14 100 11 2 0 0 2 0 0 1 1 0 1 0 0 0
+12 | SR  | Eliesa Katoa            | 56  | 80 9 41 10 3 0 0 2 0 0 1 3 0 0 0 0 0
+13 | PR  | Keaon Koloamatangi      | 67  | 68 7 50 5 6 0 0 1 0 0 0 0 0 0 0 0 0
+14 | PR  | Stefano Utoikamanu      | 38  | 32 4 8 3 1 0 0 0 0 0 0 0 0 0 0 0 0
+15 | SR  | Kulikefu Finefeuiaki    | 34  | 20 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+16 | C   | Paul Alamoti            | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | SR  | Leka Halasima           | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+ENG:
+1  | FB  | AJ Brimson              | 29  | 80 2 23 1 5 2 0 0 0 0 0 0 0 0 0 0 0
+2  | C   | Zach Eckersley          | 38  | 80 3 27 1 6 0 0 2 0 0 0 0 0 0 0 0 0
+3  | C   | Herbie Farnworth        | 36  | 80 6 34 7 3 0 0 2 0 0 0 2 0 0 0 0 0
+4  | 5/8 | Hugo Savala             | 43  | 80 6 65 9 3 0 0 3 0 0 1 1 0 0 0 0 0
+5  | W   | Dominic Young           | 58  | 80 5 53 2 2 0 0 3 0 0 1 0 0 1 0 0 0
+6  | HB  | George Williams         | 34  | 80 8 31 5 2 0 0 1 2 34 0 0 0 0 0 0 0
+7  | HB  | Jamie Humphreys         | 56  | 80 7 48 6 1 0 0 3 0 0 0 0 0 1 0 0 0
+8  | PR  | Max King                | 18  | 62 7 14 6 3 0 0 0 0 0 0 0 0 0 0 0 0
+9  | HK  | Brad O'Neill            | 48  | 80 9 47 21 7 1 0 1 0 0 0 0 0 0 0 0 0
+10 | PR  | Luke Thompson           | 27  | 62 6 39 4 4 0 0 1 0 0 0 0 0 0 0 0 0
+11 | SR  | Kai Pearce-Paul         | 34  | 80 8 58 6 2 0 0 2 0 0 0 1 0 0 0 0 0
+12 | SR  | Junior Nsemba           | 33  | 80 6 44 5 4 0 0 2 0 0 0 0 0 0 0 0 0
+13 | L   | Victor Radley           | 37  | 72 7 60 5 6 0 0 1 0 0 0 0 0 0 0 0 0
+14 | L   | Morgan Smithies         | 3   | 27 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0
+15 | SR  | Matty Nicholson         | 9   | 19 2 6 2 2 0 0 0 0 0 0 0 0 0 0 0 0
+16 | HB  | Harry Smith             | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | Ethan Havard            | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+`,
+
 "intl-13-0-3": `
 Player of the Match: PNG Zac Laybutt
 Team Stats:

@@ -23,7 +23,7 @@ function rpWhen(g){   // "Round 11 of Season 13", "the Season 13 Grand Final", "
   return `${r.name} of ${S}`;
 }
 function rpCompName(c){ const x=MC_COMP[c]; return x?x.name():""; }
-function viewReport(mid){
+function viewReport(mid, asData){
   const g=dbMatch(mid);
   if(!g || !played(g.m)) return `${pageHead("Match Report")}<div class="pbody"><div class="empty">${g?"This game hasn't been played yet.":"Match not found."}</div></div>`;
   const {c,s,r,m,ri}=g, H=m.home, A=m.away, kh=mcKey(H), ka=mcKey(A), nH=team(H).nick, nA=team(A).nick;
@@ -86,6 +86,20 @@ function viewReport(mid){
     else { const lastW=prevW[prevW.length-1]; if(lastW.sid<g.sid-1) t+=`, and their first against them since Season ${lastW.sid}`; }
     P.push(t+`. The head-to-head now stands at ${Math.max(wWins,lWins)}-${Math.min(wWins,lWins)}${hd?` with ${hd} draw${hd>1?"s":""}`:""}${wWins>lWins?` in ${rpPoss(T(W))} favour`:wWins<lWins?` in ${rpPoss(T(L))} favour`:""}.`);
   } else if(h2h.length===1 && W) P.push(`It was the first ever meeting between the two sides.`);
+  // who did what (when match stats were entered)
+  const MS = typeof msGet==="function" ? msGet(mid) : null;
+  if(MS){
+    const side=x=>msSide(MS,x), list=a=>a.length<=1?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+    const scorers=x=>side(x).filter(p=>p.tries).sort((a,b)=>b.tries-a.tries).map(p=>p.tries>1?`${p.name} (${p.tries})`:p.name);
+    const kick=x=>{ const k=side(x).filter(p=>p.c||p.pg).sort((a,b)=>(b.c+b.pg)-(a.c+a.pg))[0]; if(!k) return ""; const tr=side(x).reduce((a,p)=>a+p.tries,0); return k.pg?`${k.name} kicking ${k.c+k.pg} goals`:`${k.name} converting ${k.c} of ${tr}`; };
+    const para=x=>{ const s=scorers(x); if(!s.length) return `${Tc(x)} didn't cross the line.`; const k=kick(x); return `${rpPoss(Tc(x))} tries came from ${list(s)}${k?`, with ${k}`:""}.`; };
+    const first=W||H, second=first===H?A:H;
+    P.push(para(first)+" "+para(second));
+    if(MS.potm){ const p=[...side(H),...side(A)].find(x=>x.name===MS.potm.name);
+      if(p){ const bits=[]; if(p.tries) bits.push(`${rpNum(p.tries)} tr${p.tries>1?"ies":"y"}`); if(p.arm>=100) bits.push(`${p.arm} run metres`); if(p.lb>=3) bits.push(`${p.lb} line breaks`); if(p.ta) bits.push(`${rpNum(p.ta)} try assist${p.ta>1?"s":""}`); if(p.t>=25) bits.push(`${p.t} tackles`); if(p.c>=5) bits.push(`${p.c} conversions`);
+        P.push(`${p.name} was named Player of the Match${bits.length?` with ${list(bits)}`:""}.`); } }
+    const tv=k=>MS.team[k]; if(tv("possession")&&tv("line breaks")) P.push(`${Tc(H)} had ${tv("possession")[0]} of the ball to ${rpPoss(T(A))} ${tv("possession")[1]}, and the line breaks finished ${tv("line breaks")[0]}-${tv("line breaks")[1]}.`);
+  }
 
   // ---- records
   const seasonGames=hist.filter(x=>x.c===g.c&&x.sid===g.sid);
@@ -154,7 +168,8 @@ function viewReport(mid){
   const others=r.matches.map((x,i)=>({x,i})).filter(o=>o.x!==m&&played(o.x)&&o.x.mid);
   const more=others.length?`<section class="mc-card rp-more"><h3 class="mc-h">More from ${esc(r.rep?(m.series||r.name):r.name)}</h3>${others.map(o=>`<a href="#report-${o.x.mid}">${logo(o.x.home,"sm")}<span>${esc(team(o.x.home).nick)}</span><b>${o.x.hs} – ${o.x.as}</b><span>${esc(team(o.x.away).nick)}</span>${logo(o.x.away,"sm")}</a>`).join("")}</section>`:"";
   const back = r.rep ? `${c}-${s.id}` : `${c}-${s.id}-${ri+1}`;
-  const themeCol = (r.finals||r.isFinal) ? FINALS_COLOUR : r.theme ? THEME_COLOURS[r.theme.trim().toLowerCase()] : null;
+  const themeCol = (r.finals||r.isFinal) && c==="draw" ? FINALS_COLOUR : r.theme ? THEME_COLOURS[r.theme.trim().toLowerCase()] : null;
+  if(asData) return {headline, P, IMP:IMP.filter(Boolean), nums, card, kicker:`${rpCompName(c)} · ${s.name}${r.theme?` · ${r.theme}`:""}`, comp:c, home:H, away:A};
   return `<div class="draw-page"${themeCol?` style="--accent:${themeCol}"`:""}>${pageHead("Match Report")}<div class="pbody rp-page">
     <a class="back" href="#${back}">‹ Back to Draw</a>
     <article class="rp">
