@@ -17,6 +17,8 @@ window.NEWS_DATA = [
 /* Match reports (only for games with a cover image): give the match id
    (from its match centre link) and the image. The headline, summary and
    story are written automatically from the result and the match stats. */
+{ id:"report-nzl-aus-s13-r2", tag:"International", date:"2026-11-16", report:"intl-13-1-1",
+  image:"img/news/nzl-aus-s13-r2.webp", imagePos:"center 30%" },
 { id:"monday-night-footy-s14", tag:"Draw", date:"2026-11-16",
   title:"Monday Night Footy returns as Season 14 expands to nine games a round",
   summary:"The Bears' return means an extra game every week, and two rounds will finish under Monday night lights.",

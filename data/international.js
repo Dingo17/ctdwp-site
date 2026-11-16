@@ -85,7 +85,7 @@ NZL 36 - 18 ENG - Go Media Stadium, Auckland
 
 Round 2:
 TON 60 - 8 ENG - HBF Park, Perth
-NZL V AUS - Eden Park, Auckland - Saturday 4:05pm
+NZL 6 - 24 AUS - Eden Park, Auckland
 
 Round 3:
 AUS V ENG - CommBank Stadium, Sydney - Friday 8:10pm

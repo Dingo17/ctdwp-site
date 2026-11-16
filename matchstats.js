@@ -252,6 +252,10 @@ function shBuild(it){
   f.addEventListener("click",e=>{ const th=e.target.closest("th"); if(!th) return;
     const i=[...clone.tHead.querySelectorAll("th")].indexOf(th), src=[...it.tb.tHead.querySelectorAll("th")][i]; if(!src) return;
     (src.querySelector("button")||src).click(); setTimeout(()=>{ shBuild(it); shUpdate(); },0); });
+  // the copy lives outside the page's sections, so pin its size to the original's: same table width, same column widths
+  clone.style.width=clone.style.minWidth=clone.style.maxWidth=it.tb.offsetWidth+"px";
+  const sth=[...it.tb.tHead.querySelectorAll("th")], cth=[...clone.tHead.querySelectorAll("th")];
+  sth.forEach((th,i)=>{ const w=th.getBoundingClientRect().width+"px"; if(cth[i]){ cth[i].style.width=cth[i].style.minWidth=cth[i].style.maxWidth=w; cth[i].style.boxSizing="border-box"; } });
   SH.layer.appendChild(f); it.f=f; it.w=it.tb.offsetWidth;
 }
 function shUpdate(){
@@ -262,7 +266,7 @@ function shUpdate(){
     const show = hr.top<top && r.bottom-hr.height>top+8;
     if(!show){ if(it.f) it.f.style.display="none"; return; }
     if(!it.f||it.w!==tb.offsetWidth) shBuild(it);
-    const f=it.f; f.style.display="block"; f.style.top=top+"px"; f.style.left=wr.left+"px"; f.style.width=wr.width+"px"; f.style.height=hr.height+"px";
+    const f=it.f; f.style.display="block"; f.style.top=top+"px"; f.style.left=wr.left+"px"; f.style.width=wr.width+"px"; f.style.height=Math.max(hr.height, it.f.querySelector("thead").offsetHeight)+"px";
     f.scrollLeft=it.wrap.scrollLeft;
   });
 }

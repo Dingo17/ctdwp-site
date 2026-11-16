@@ -14,6 +14,59 @@
    ========================================================= */
 window.MATCH_STATS = {
 
+"intl-13-1-1": `
+Player of the Match: AUS Nathan Cleary
+Team Stats:
+Tries 1 - 4
+Goals 1 - 4
+Field Goals 0 - 0
+Possession 39% - 61%
+Completions 5/9 - 9/11
+Errors 4 - 2
+Penalties Conceded 0 - 0
+Tackles 64 - 41
+Missed Tackles 2 - 3
+Line Breaks 9 - 23
+
+NZL:
+1  | FB  | Kalyn Ponga             | 33  | 80 3 21 2 4 0 0 1 0 0 1 0 0 0 0 0 0
+2  | W   | Ronaldo Mulitalo        | N/A | 80 1 13 1 1 0 0 0 0 0 0 1 0 0 0 0 0
+3  | FB  | Kaeo Weekes             | 61  | 80 4 40 4 6 0 0 2 0 0 0 0 0 1 0 0 0
+4  | C   | Casey McLean            | 31  | 80 4 57 5 3 0 0 2 0 0 0 1 0 0 0 0 0
+5  | W   | Jamayne Isaako          | 28  | 80 2 37 2 4 0 0 2 0 0 0 0 0 0 1 0 0
+6  | HB  | Kodi Nikorima           | 28  | 80 2 14 6 4 1 0 0 2 48 0 0 0 0 0 0 0
+7  | HB  | Jahrome Hughes          | 33  | 80 8 88 6 2 0 0 1 1 31 0 0 0 0 0 0 0
+8  | PR  | Moses Leota             | 24  | 52 4 42 1 6 0 0 0 0 0 0 0 0 0 0 0 0
+9  | HK  | Jeremy Marshall-King    | 48  | 80 14 42 25 10 0 0 0 0 0 0 0 0 0 0 0 0
+10 | PR  | James Fisher-Harris     | 12  | 40 4 30 2 2 0 0 0 0 0 0 1 0 0 0 0 0
+11 | SR  | Briton Nikora           | 19  | 80 5 27 3 3 1 0 0 0 0 0 0 0 0 0 0 0
+12 | SR  | Scott Sorensen          | 17  | 80 3 10 2 4 0 0 0 0 0 0 0 0 0 0 0 0
+13 | SR  | Joseph Tapine           | 33  | 68 6 27 3 8 0 0 0 0 0 0 0 0 0 0 0 0
+14 | PR  | Naufahu Whyte           | 33  | 41 5 64 3 4 0 0 1 0 0 0 1 0 0 0 0 0
+15 | HK  | Erin Clark              | 14  | 41 3 23 1 3 0 0 0 0 0 0 0 0 0 0 0 0
+16 | FB  | Keano Kini              | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | SR  | Isaiah Papali'i         | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+AUS:
+1  | FB  | Reece Walsh             | 68  | 80 7 97 5 2 1 0 3 0 0 0 0 0 0 0 0 0
+2  | W   | Xavier Savage           | 86  | 80 5 85 5 2 0 0 3 0 0 0 1 0 1 0 0 0
+3  | FB  | Tom Trbojevic           | 57  | 80 4 57 2 1 0 0 2 0 0 0 0 0 0 0 0 0
+4  | FB  | Latrell Mitchell        | 62  | 80 6 43 4 2 0 0 2 0 0 0 0 0 0 0 0 0
+5  | C   | Jack Bostock            | 67  | 80 5 23 4 1 0 0 2 0 0 1 0 0 0 0 0 0
+6  | 5/8 | Fletcher Sharpe         | 79  | 80 10 121 9 5 0 0 2 0 0 0 0 0 0 0 0 0
+7  | HB  | Nathan Cleary           | 111 | 80 12 106 5 0 0 0 2 3 72 0 0 0 2 4 0 0
+8  | L   | Patrick Carrigan        | 58  | 52 6 73 2 2 0 0 1 0 0 0 0 0 0 0 0 0
+9  | HK  | Harry Grant             | 92  | 80 16 50 33 10 0 0 0 0 0 1 0 0 0 0 0 0
+10 | L   | Cameron Murray          | 42  | 39 5 18 3 3 0 0 1 0 0 0 1 0 0 0 0 0
+11 | SR  | Dylan Lucas             | 55  | 80 4 11 5 3 1 0 1 0 0 0 0 0 0 0 0 0
+12 | SR  | Hudson Young            | 100 | 80 10 62 7 3 0 0 3 0 0 1 0 0 1 0 0 0
+13 | L   | Isaah Yeo               | 65  | 67 11 32 8 8 0 0 0 0 0 0 0 0 0 0 0 0
+14 | SR  | Liam Martin             | 45  | 41 3 25 2 1 1 0 1 0 0 0 0 0 0 0 0 0
+15 | PR  | Reuben Cotter           | 39  | 41 4 11 3 1 0 0 0 0 0 0 0 0 0 0 0 0
+16 | 5/8 | Ethan Strange           | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | Lindsay Collins         | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+`,
+
 "intl-13-1-0": `
 Player of the Match: TON Tolutau Koula
 Team Stats:
