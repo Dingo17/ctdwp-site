@@ -364,9 +364,12 @@ function dbFutures(){
   add("oscore","origin","Series Correct Score",["NSW 3-0","NSW 2-1","QLD 2-1","QLD 3-0"].map(k=>sel(`origin|${O.sid}|score|${k.replace(" ","_")}`,k.replace("NSW","Blues").replace("QLD","Maroons"),O.score[k]||0.001,DB.OVER.pos,{ev:og,team:k.slice(0,3)})));
   // International Series tournaments
   if(I) Object.entries(I.groups).forEach(([g,G])=>{ if(G.done||!G.teams) return;
-    const ev=`${g} – Season ${I.sid}`, tt=G.teams.slice().sort((a,b)=>G.win[b]-G.win[a]), slug=g.replace(/\s+/g,"_");
+    // teams already through (Q) or already out (E) are taken off the boards
+    let mk={}; try{ mk=intlClinch(intlSeason(I.sid),g); }catch(e){}
+    const ev=`${g} – Season ${I.sid}`, tt=G.teams.slice().sort((a,b)=>G.win[b]-G.win[a]).filter(t=>mk[t]!=="E"), slug=g.replace(/\s+/g,"_");
     add("grp-"+slug,"intl",`${g} Winner`,tt.map(t=>sel(`intl|${I.sid}|grp|${slug}|${t}`,team(t).nick,G.win[t]/G.N,DB.OVER.outright,{ev,team:t,tail:0.002})));
-    if(!G.known) add("grpf-"+slug,"intl",`${g}: To Make the Final`,tt.map(t=>sel(`intl|${I.sid}|grpf|${slug}|${t}`,team(t).nick,G.final[t]/G.N,DB.OVER.yesno,{ev,team:t,tail:0.002})));
+    const open=tt.filter(t=>mk[t]!=="Q"), through=tt.filter(t=>mk[t]==="Q");
+    if(!G.known && open.length) add("grpf-"+slug,"intl",`${g}: To Make the Final`+(through.length?` (${through.map(t=>team(t).nick).join(" & ")} already through)`:""),open.map(t=>sel(`intl|${I.sid}|grpf|${slug}|${t}`,team(t).nick,G.final[t]/G.N,DB.OVER.yesno,{ev,team:t,tail:0.002})));
   });
   markets.forEach(mk=>mk.sels.forEach(s=>s.mkt=mk.name));
   return DB_FUT={markets, P, O, I, sid};

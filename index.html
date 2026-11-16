@@ -877,6 +877,12 @@ a.rec-game:hover,.rec-game a:hover{color:var(--ink);text-decoration:underline}
   .h2-item{grid-template-columns:minmax(0,1fr) 112px;gap:14px}
   .h2-item h3{font-size:15px}
 }
+.lad-mark{display:inline-block;font-size:10px;font-weight:800;line-height:1;padding:3px 5px;border-radius:3px;margin-left:6px;vertical-align:middle;letter-spacing:.04em}
+.lad-mark.q{background:var(--accent);color:var(--accent-ink,#000)}
+.lad-mark.e{background:#ddd;color:#666}
+.lad-legend{font-size:13px;color:var(--muted);margin:10px 4px 0}
+.lad-legend .lad-mark{margin:0 4px 0 12px}
+.lad-legend .lad-mark:first-child{margin-left:0}
 </style>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
@@ -1580,7 +1586,7 @@ function fullLadder(rows, prev, cut=COMP.finalsSpots){
       <td class="c-pos"><span class="pn">${i+1}</span>${mv}</td>
       ${CLUB_BG[r.code]?`<td class="c-logo"><a href="#club-${r.code}" title="${esc(t.name||t.nick)} club site"><img src="${esc(t.ladderLogo)}" alt=""></a></td>
       <td class="c-name"><a class="lad-club" href="#club-${r.code}">${esc(t.nick)}</a></td>`:`<td class="c-logo"><img src="${esc(t.ladderLogo)}" alt=""></td>
-      <td class="c-name">${esc(t.nick)}</td>`}<td class="c-gap"></td>
+      <td class="c-name">${esc(t.nick)}${r.mark?` <span class="lad-mark ${r.mark==="Q"?"q":"e"}" title="${r.mark==="Q"?"Qualified for the final":"Eliminated"}">${r.mark}</span>`:""}</td>`}<td class="c-gap"></td>
       <td>${r.P}</td><td class="pts">${r.Pts}</td>
       ${cols.map(c=>`<td>${c.val(r)}</td>`).join("")}
       <td class="c-next">${nx}</td></tr>`;
@@ -1665,6 +1671,28 @@ function intlSeason(id){
 const ordinal = n => n + (["th","st","nd","rd"][((n%100-20)%10+10)%10] && ![11,12,13].includes(n%100) ? ["th","st","nd","rd"][n%10] || "th" : "th");
 const INTL_FINAL_SPOTS = 2;
 function intlGroups(s){ const g=[]; s.rounds.forEach(r=>r.matches.forEach(m=>{ if(m.group && !g.includes(m.group)) g.push(m.group); })); return g; }
+// Who is already through to the group final (or already out) after a round?
+// Plays out every possible result (win, draw or loss) of the group games still to come.
+function intlClinch(s, group, upto){
+  const gs=intlGroupSeason(s,group), P=COMP.points, reg=regularIdx(gs);
+  if(upto==null) upto=defaultLadderRound(gs);
+  const base={}; computeLadder(gs,upto).forEach(r=>base[r.code]=r.Pts);
+  const left=[]; reg.forEach(ri=>gs.rounds[ri].matches.forEach(m=>{ if(ri>upto||!played(m)) left.push(m); }));
+  const teams=Object.keys(base), spots=INTL_FINAL_SPOTS, out={};
+  if(!teams.length) return out;
+  teams.forEach(c=>out[c]={inAll:true,outAll:true});
+  const n=left.length; if(n>8) return {};
+  for(let k=0;k<Math.pow(3,n);k++){
+    const pts={...base}; let x=k;
+    left.forEach(m=>{ const o=x%3; x=Math.floor(x/3);
+      if(o===0){ pts[m.home]+=P.win; pts[m.away]+=P.loss; } else if(o===1){ pts[m.away]+=P.win; pts[m.home]+=P.loss; } else { pts[m.home]+=P.draw; pts[m.away]+=P.draw; } });
+    teams.forEach(c=>{ const ge=teams.filter(o=>o!==c&&pts[o]>=pts[c]).length, gt=teams.filter(o=>o!==c&&pts[o]>pts[c]).length;
+      if(ge>=spots) out[c].inAll=false;      // could be caught on points
+      if(gt<spots) out[c].outAll=false; });  // could still finish in the top spots
+  }
+  const res={}; teams.forEach(c=>{ if(out[c].inAll) res[c]="Q"; else if(out[c].outAll) res[c]="E"; });
+  return res;
+}
 function intlGroupSeason(s, group){   // same rounds, only this group's games, for the ladder
   return {id:s.id, name:s.name, tieByName:true, rounds:s.rounds.map(r=>({...r, matches:r.matches.filter(m=>m.group===group)}))};
 }
@@ -2188,9 +2216,11 @@ function viewTest(sid){
     ${body}</div>`;
 }
 
+// a round's ladder only exists once a game in that round has been played
+function startedRounds(s, reg){ let last=0; reg.forEach((ri,j)=>{ if(s.rounds[ri].matches.some(played)) last=j; }); return reg.slice(0,last+1); }
 function viewLadder(sid, rno){
   const s = sid ? seasonById(sid) : latestSeason();
-  const reg = regularIdx(s);
+  const reg = startedRounds(s, regularIdx(s));
   let upto = rno ? reg[Math.min(reg.length,Math.max(1,parseInt(rno)))-1] : defaultLadderRound(s);
   if(upto==null) upto=defaultLadderRound(s);
   const k = reg.indexOf(upto);
@@ -2211,18 +2241,19 @@ function viewIntlLadder(sid, rno, kind="intl"){
   const ids=Object.keys(src||{}).map(Number);
   const id = sid && ids.includes(+sid) ? +sid : Math.max(...ids);
   const s=(kind==="rlwc"?rlwcSeason:intlSeason)(id), groups=intlGroups(s);
-  const reg = regularIdx(s);
+  const reg = startedRounds(s, regularIdx(s));
   let upto = rno ? reg[Math.min(reg.length,Math.max(1,parseInt(rno)))-1] : defaultLadderRound(s);
   if(upto==null) upto=defaultLadderRound(s);
   const k = reg.indexOf(upto), base=`${page}-${s.id}-`;
   const roundCtl = roundBox(base, reg.map((ri,j)=>({n:j+1,label:s.rounds[ri].name,cur:ri===upto})));
-  const tables = groups.map(g=>{ const gs=intlGroupSeason(s,g);
-    return `<h2 class="lad-group">${esc(g)}</h2>${fullLadder(computeLadder(gs,upto), k>0?computeLadder(gs,reg[k-1]):null, INTL_FINAL_SPOTS)}`; }).join("");
+  const tables = groups.map(g=>{ const gs=intlGroupSeason(s,g), marks=intlClinch(s,g,upto), rows=computeLadder(gs,upto).map(r=>({...r,mark:marks[r.code]}));
+    return `<h2 class="lad-group">${esc(g)}</h2>${fullLadder(rows, k>0?computeLadder(gs,reg[k-1]):null, INTL_FINAL_SPOTS)}`; }).join("");
+  const legend = tables.includes('lad-mark') ? `<p class="lad-legend"><span class="lad-mark q">Q</span> Qualified for the final <span class="lad-mark e">E</span> Eliminated</p>` : "";
   return `${pageHead("Ladder")}<div class="pbody">
     <div class="filters lad-filters">${compSelect(page,s)}${seasonSelect(s,page+"-","",x=>ids.includes(x.id))}${roundCtl}
       <div class="cust"><button class="cust-btn" onclick="toggleLadderPanel()">${ladderPanelOpen?'<span class="cb-text">Hide Ladder Options</span> <span class="x">✕</span>':'<span class="cb-text">Customise Ladder</span> '+ICON_SLIDERS}</button>${ladderPanel()}</div>
     </div>
-    ${tables}
+    ${tables}${legend}
   </div>`;
 }
 

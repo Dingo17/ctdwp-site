@@ -147,6 +147,9 @@ function viewReport(mid, asData){
   if(r.intl && !r.isFinal && m.group){
     const post=x=>mcLad(c,s,x,ri); const a=post(H), b=post(A);
     if(a&&b) IMP.push(`In the ${m.group}, ${T(H)} are ${ordinal(a.pos)} and ${T(A)} ${ordinal(b.pos)} after this round.`);
+    if(typeof intlClinch==="function"){ const mk=intlClinch(s,m.group,ri), prevMk=ri>0?intlClinch(s,m.group,ri-1):{};
+      [W||H,L||A].forEach(x=>{ if(mk[x]==="Q"&&prevMk[x]!=="Q") IMP.push(`${Tc(x)} have booked their place in the ${m.group} final.`);
+        else if(mk[x]==="E"&&prevMk[x]!=="E") IMP.push(`${Tc(x)} can no longer make the ${m.group} final.`); }); }
   }
   if(r.intl && r.isFinal && W) IMP.push(`${Tc(W)} are the ${s.name} ${m.group||rpCompName(c)} champions.`);
   // IRL ranking points
