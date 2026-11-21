@@ -14,6 +14,59 @@
    ========================================================= */
 window.MATCH_STATS = {
 
+"intl-13-1-2": `
+Player of the Match: FIJ Maika Sivo
+Team Stats:
+Tries 5 - 2
+Goals 6 - 1
+Field Goals 0 - 0
+Possession 59% - 41%
+Completions 8/13 - 6/9
+Errors 5 - 5
+Penalties Conceded 0 - 2
+Tackles 53 - 55
+Missed Tackles 0 - 0
+Line Breaks 21 - 9
+
+FIJ:
+1  | FB  | Jahream Bula            | 77  | 80 5 109 4 4 0 0 2 0 0 0 0 0 0 0 0 0
+2  | W   | Maika Sivo              | 132 | 80 7 173 1 2 0 0 5 0 0 0 0 0 3 0 0 0
+3  | W   | Semi Valemei            | 92  | 80 7 53 7 2 0 0 3 0 0 2 1 0 1 0 0 0
+4  | C   | Waqa Blake              | 52  | 80 4 20 6 2 0 0 1 0 0 0 1 0 0 0 0 0
+5  | W   | Sunia Turuva            | 53  | 80 2 14 1 5 0 0 1 0 0 0 1 0 0 0 0 0
+6  | 5/8 | Kurt Donoghoe           | 73  | 80 12 44 14 4 0 0 1 2 91 0 0 0 0 0 0 0
+7  | 5/8 | Brandon Wakeham         | 71  | 80 13 41 11 3 0 0 0 0 0 1 0 0 0 5 0 1
+8  | PR  | Caleb Navale            | 77  | 69 9 79 4 9 0 0 3 0 0 0 1 0 0 0 0 0
+9  | HK  | Apisai Koroisau         | 71  | 80 9 38 33 3 0 0 0 0 0 0 1 0 0 0 0 0
+10 | PR  | Jacob Saifiti           | 70  | 69 5 42 8 6 0 0 1 0 0 0 0 0 0 0 0 0
+11 | SR  | Viliame Kikau           | 87  | 80 11 57 10 6 0 0 1 0 0 2 0 0 0 0 0 0
+12 | SR  | Siua Wong               | 84  | 80 9 60 4 2 0 0 2 0 0 0 0 0 1 0 0 0
+13 | SR  | Taane Milne             | 68  | 80 8 56 6 6 0 0 1 0 0 0 0 0 0 0 0 0
+14 | SR  | Kitione Kautoga         | 34  | 10 2 19 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+15 | PR  | Mitchell Prest          | 31  | 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+16 | W   | Jethro Rinakama         | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | SR  | Elijah Keung            | 30  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+COK:
+1  | FB  | Esom Ioka               | 25  | 80 2 12 1 5 0 0 0 0 0 0 0 0 0 0 0 0
+2  | W   | Paul Ulberg             | 18  | 80 1 4 3 2 0 0 0 0 0 0 0 0 0 0 0 0
+3  | C   | Valentine Holmes        | 73  | 80 7 98 7 6 0 0 3 0 0 0 0 0 1 1 0 0
+4  | C   | KL Iro                  | 36  | 80 2 17 1 5 0 0 0 0 0 0 0 0 1 0 0 0
+5  | C   | Reubenn Rennie          | 12  | 80 0 0 1 3 0 0 0 0 0 0 0 0 0 0 0 0
+6  | C   | Brad Takairangi         | 37  | 80 9 53 6 4 0 0 1 2 74 0 0 0 0 0 0 0
+7  | C   | Esan Marsters           | 22  | 80 5 15 6 4 0 0 0 2 51 0 1 0 0 0 0 0
+8  | PR  | Davvy Moale             | 19  | 60 3 12 3 4 0 0 0 0 0 0 0 1 0 0 0 0
+9  | HK  | Rua Ngatikaura          | 41  | 80 8 41 22 4 0 0 1 0 0 0 0 0 0 0 0 0
+10 | PR  | Makahesi Makatoa        | 27  | 60 8 60 4 3 0 0 1 0 0 0 0 0 0 0 0 0
+11 | SR  | Brendan Piakura         | 33  | 80 5 43 4 7 0 0 1 0 0 0 1 0 0 0 0 0
+12 | SR  | Marata Niukore          | 36  | 80 6 50 6 3 0 0 2 0 0 1 0 0 0 0 0 0
+13 | L   | Mason Teague            | 30  | 69 7 31 2 7 0 0 0 0 0 0 0 0 0 0 0 0
+14 | PR  | Rhys Dakin              | 12  | 31 1 1 1 1 0 0 0 0 0 1 0 0 0 0 0 0
+15 | SR  | Amare Milford           | 8   | 21 1 3 0 2 0 0 0 0 0 0 0 1 0 0 0 0
+16 | C   | Delahia Wigmore         | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | K-Ci Newton-Whare       | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+`,
+
 "intl-13-1-1": `
 Player of the Match: AUS Nathan Cleary
 Team Stats:

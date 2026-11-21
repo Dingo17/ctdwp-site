@@ -100,7 +100,7 @@ SAM 46 - 18 COK - HFC Bank Stadium, Suva
 FIJ 30 - 34 PNG - HFC Bank Stadium, Suva
 
 Round 2:
-FIJ V COK - HFC Bank Stadium, Suva - Saturday 6:10pm
+FIJ 32 - 10 COK - HFC Bank Stadium, Suva
 PNG V SAM - Santos National Football Stadium, Port Moresby - Sunday 4:05pm
 
 Round 3:

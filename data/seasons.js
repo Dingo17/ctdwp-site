@@ -2463,6 +2463,7 @@ Rd8 CAN V WST - Glen Willow Oval, Mudgee
 Rd10 SGI V SYD - St George Venues Jubilee Stadium, Kogarah
 Rd11 PEN V WAR - Industree Group Stadium, Gosford
 Rd11 DOL V NEW - HBF Park, Perth
+Rd11 CBY V MAN - Allianz Stadium, Sydney
 Rd12 SOU V PAR - Allianz Stadium, Sydney
 Rd12 WST V PEN - Allianz Stadium, Sydney
 Rd13 SGI V PEN - St George Venues Jubilee Stadium, Kogarah

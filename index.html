@@ -2246,9 +2246,9 @@ function viewIntlLadder(sid, rno, kind="intl"){
   if(upto==null) upto=defaultLadderRound(s);
   const k = reg.indexOf(upto), base=`${page}-${s.id}-`;
   const roundCtl = roundBox(base, reg.map((ri,j)=>({n:j+1,label:s.rounds[ri].name,cur:ri===upto})));
-  const tables = groups.map(g=>{ const gs=intlGroupSeason(s,g), marks=intlClinch(s,g,upto), rows=computeLadder(gs,upto).map(r=>({...r,mark:marks[r.code]}));
+  const tables = groups.map(g=>{ const gs=intlGroupSeason(s,g), rows=computeLadder(gs,upto);
     return `<h2 class="lad-group">${esc(g)}</h2>${fullLadder(rows, k>0?computeLadder(gs,reg[k-1]):null, INTL_FINAL_SPOTS)}`; }).join("");
-  const legend = tables.includes('lad-mark') ? `<p class="lad-legend"><span class="lad-mark q">Q</span> Qualified for the final <span class="lad-mark e">E</span> Eliminated</p>` : "";
+  const legend = "";
   return `${pageHead("Ladder")}<div class="pbody">
     <div class="filters lad-filters">${compSelect(page,s)}${seasonSelect(s,page+"-","",x=>ids.includes(x.id))}${roundCtl}
       <div class="cust"><button class="cust-btn" onclick="toggleLadderPanel()">${ladderPanelOpen?'<span class="cb-text">Hide Ladder Options</span> <span class="x">✕</span>':'<span class="cb-text">Customise Ladder</span> '+ICON_SLIDERS}</button>${ladderPanel()}</div>
