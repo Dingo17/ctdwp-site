@@ -14,6 +14,59 @@
    ========================================================= */
 window.MATCH_STATS = {
 
+"intl-13-1-3": `
+Player of the Match: SAM Stephen Crichton
+Team Stats:
+Tries 4 - 5
+Goals 3 - 5
+Field Goals 0 - 0
+Possession 54% - 46%
+Completions 7/11 - 6/12
+Errors 4 - 7
+Penalties Conceded 0 - 1
+Tackles 48 - 61
+Missed Tackles 4 - 2
+Line Breaks 15 - 20
+
+PNG:
+1  | FB  | Morea Morea             | 18  | 80 3 12 6 2 1 0 0 0 0 0 0 0 0 0 0 0
+2  | W   | Xavier Coates           | 51  | 80 4 93 2 2 0 0 3 0 0 0 0 0 1 0 0 0
+3  | W   | Alex Johnston           | 56  | 80 6 28 6 5 0 0 1 0 0 1 1 0 1 0 0 0
+4  | C   | Zac Laybutt             | 45  | 80 6 37 5 4 0 0 2 0 0 1 1 0 0 0 0 0
+5  | W   | Robert Derby            | 44  | 80 4 47 1 2 0 0 2 0 0 0 0 0 1 0 0 0
+6  | HB  | Kyle Laybutt            | 23  | 80 3 10 4 2 1 1 0 1 36 0 0 0 0 0 0 0
+7  | 5/8 | Lachlan Lam             | 29  | 80 10 36 8 3 0 0 0 1 59 0 1 0 0 0 0 0
+8  | PR  | Valentine Richard       | 40  | 74 15 90 13 3 1 0 1 0 0 0 0 0 0 0 0 0
+9  | HK  | Edwin Ipape             | 44  | 80 15 44 35 7 0 0 0 0 0 1 0 0 0 0 0 0
+10 | SR  | Luca Moretti            | 32  | 74 9 79 3 5 1 0 0 0 0 0 0 0 0 0 0 0
+11 | SR  | Rhyse Martin            | 71  | 80 11 92 7 4 0 0 3 0 0 1 0 0 1 3 0 0
+12 | SR  | Nixon Putt              | 6   | 80 4 22 3 3 0 0 0 0 0 0 1 0 0 0 0 0
+13 | HK  | Liam Horne              | 43  | 72 7 70 6 6 0 0 3 0 0 0 1 0 0 0 0 0
+14 | L   | Jack de Belin           | 4   | 13 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0
+15 | PR  | Epel Kapinias           | 2   | 5 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+16 | HB  | Bailey Biondi-Odo       | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | Sylvester Namo          | N/A | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+SAM:
+1  | FB  | Sualauvi Fa'alogo       | 49  | 80 8 72 3 3 1 0 2 0 0 0 0 0 0 0 0 0
+2  | W   | Brian To'o              | 71  | 80 4 97 7 0 0 0 2 0 0 1 0 0 1 0 0 0
+3  | C   | Stephen Crichton        | 94  | 80 7 117 1 2 0 0 3 0 0 0 0 1 2 5 0 0
+4  | FB  | Hamiso Tabuai-Fidow     | 50  | 80 4 34 3 2 0 0 2 0 0 1 0 0 0 0 0 0
+5  | C   | Deine Mariner           | 52  | 80 2 17 4 1 0 0 1 0 0 0 0 0 1 0 0 0
+6  | 5/8 | Jarome Luai             | 55  | 80 10 55 10 1 1 0 1 0 0 1 0 0 0 0 0 0
+7  | 5/8 | Dylan Brown             | 38  | 80 8 24 6 7 0 0 1 0 0 0 1 0 0 0 0 0
+8  | PR  | Payne Haas              | 66  | 55 9 81 4 5 0 0 1 0 0 0 0 0 1 0 0 0
+9  | HK  | Benaiah Ioelu           | 80  | 80 13 41 26 12 0 1 0 0 0 0 0 0 0 0 0 0
+10 | PR  | Terrell May             | 46  | 42 3 43 2 6 0 0 1 0 0 0 1 0 0 0 0 0
+11 | SR  | Jeremiah Nanai          | 58  | 80 8 115 8 4 0 0 4 0 0 0 3 0 0 0 0 0
+12 | SR  | Connelly Lemuelu        | 54  | 80 6 39 6 6 0 0 1 0 0 0 0 0 0 0 0 0
+13 | PR  | Tino Fa'asuamaleaui     | 39  | 67 4 15 3 5 0 0 0 0 0 0 0 0 0 0 0 0
+14 | SR  | Francis Manuleleua      | 33  | 39 2 13 2 3 0 0 0 0 0 1 0 0 0 0 0 0
+15 | PR  | Spencer Leniu           | 36  | 39 2 24 3 5 0 0 1 0 0 0 0 0 0 0 0 0
+16 | SR  | Simi Sasagi             | 16  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+17 | PR  | Junior Paulo            | 16  | 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+`,
+
 "intl-13-1-2": `
 Player of the Match: FIJ Maika Sivo
 Team Stats:

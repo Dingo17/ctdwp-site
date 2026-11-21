@@ -1046,7 +1046,8 @@ function newsInit(){
     const strip=h=>String(h).replace(/<[^>]+>/g,"");
     n.title=n.title||R.headline; n.summary=n.summary||strip(R.P[0]); n.tag=n.tag||"Match Report";
     if(!n.image&&!n.art) n.art={logos:[R.home,R.away], bg:"#0b0b0b"};
-    n.html=`${R.card}<div class="rp-body">${R.P.map(p=>`<p>${p}</p>`).join("")}${R.IMP.length?`<h2>What it means</h2>${R.IMP.map(p=>`<p>${p}</p>`).join("")}`:""}</div>
+    const paras=n.extra?[R.P[0],...n.extra,...R.P.slice(1)]:R.P;
+    n.html=`${R.card}<div class="rp-body">${paras.map(p=>/^<h2/.test(p)?p:`<p>${p}</p>`).join("")}${R.IMP.length?`<h2>What it means</h2>${R.IMP.map(p=>`<p>${p}</p>`).join("")}`:""}</div>
       <h2 class="rp-h">By the numbers</h2>${R.nums}<div class="rp-cta"><a class="m-btn fill" href="#match-${n.report}">Match Stats</a><a class="m-btn" href="#report-${n.report}">Full Match Report</a></div>`; });
 }
 

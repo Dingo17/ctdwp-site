@@ -17,6 +17,16 @@ window.NEWS_DATA = [
 /* Match reports (only for games with a cover image): give the match id
    (from its match centre link) and the image. The headline, summary and
    story are written automatically from the result and the match stats. */
+{ id:"report-png-sam-s13-r2", tag:"International", date:"2026-11-21", report:"intl-13-1-3",
+  title:"Samoa storm back from 16-0 down as controversial call breaks PNG hearts",
+  summary:"The Kumuls led 16-0 after half an hour in Port Moresby, but a missed short kick-off ruling late in the game helped Toa Samoa to a 30-22 win.",
+  image:"img/news/png-sam-s13-r2.webp", imagePos:"center 35%",
+  extra:[
+  "It looked like being the Kumuls' night. Roared on by a packed Port Moresby crowd, PNG raced out to a 16-0 lead inside the first half-hour, before Samoa slowly hauled themselves back into the contest.",
+  "<h2>The call everyone is talking about</h2>",
+  "With nine minutes left and PNG trailing 24-22, the Kumuls went for a short kick-off. The ball clearly travelled past the 40-metre line before Brian To'o carried it over the sideline, which should have handed the ball back to PNG. Instead, play restarted with Samoa in possession, and they made the most of it, scoring off the back of that set to put the game out of reach.",
+  "It was a cruel way for the Kumuls' comeback hopes to end, and the decision is sure to be talked about in the lead-up to the final round."
+  ]},
 { id:"report-nzl-aus-s13-r2", tag:"International", date:"2026-11-16", report:"intl-13-1-1",
   image:"img/news/nzl-aus-s13-r2.webp", imagePos:"center 30%" },
 { id:"monday-night-footy-s14", tag:"Draw", date:"2026-11-16",
